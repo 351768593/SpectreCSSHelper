@@ -110,29 +110,57 @@
 
 <template>
 	<div id="body-base">
-		<div id="panel-list-component-base" class="bg-gray scroll-y">
+		<div id="panel-list-component-base"
+		     class="bg-gray scroll-y">
 			<list-component :current-component="currentPage"
 			                @click-node="clickNode($event)"/>
 		</div>
 
 		<div id="panel-operation-base">
-			<header class="navbar bg-dark px-2" id="panel-operation-header">
-				<section class="navbar-section" id="header-chips-base">
-					<!-- 隐藏内部滚动条 -->
-					<div id="header-chips-inner">
-						<span class="chip c-hand" @click="currentPage = PageHomepage">
-							<span class="ri-home-4-line mr-1"></span>
-							home
+<!--			<header class="navbar bg-dark px-2" id="panel-operation-header">-->
+<!--				<section class="navbar-section" id="header-chips-base">-->
+<!--					&lt;!&ndash; 隐藏内部滚动条 &ndash;&gt;-->
+<!--					<div id="header-chips-inner">-->
+<!--						<span class="chip c-hand" @click="currentPage = PageHomepage">-->
+<!--							<span class="ri-home-4-line mr-1"></span>-->
+<!--							home-->
+<!--						</span>-->
+<!--						<template v-for="(objComponent, indexComponent) in listPages">-->
+<!--						<span class="chip">-->
+<!--							<span @click="currentPage = objComponent">{{ objComponent.key }}</span>-->
+<!--							<span class="ri-close-line ml-1 chip-close" @click="closePage(indexComponent)"></span>-->
+<!--						</span>-->
+<!--						</template>-->
+<!--					</div>-->
+<!--				</section>-->
+<!--				<section class="navbar-section" style="font-family: 'Minecraft Bold'; user-select: none">-->
+<!--					<img src="heart.png" style="height: 12px; image-rendering: pixelated; margin-right: 8px;"/> x 30-->
+<!--				</section>-->
+<!--			</header>-->
+			<div>
+				<ul class="tab">
+					<li class="tab-item" :class="currentPage?.type === 'homepage' ? ' active' : ''"
+					    @click="currentPage = HOMEPAGE">
+						<a href="#">homepage</a>
+					</li>
+					<li class="tab-item"
+					    :class="currentPage === page ? ' active' : ''"
+					    v-for="(page,indexPage) in listPages">
+						<a href="#">
+							<span @click="currentPage = page">{{page.key}}</span>
+							<button class="btn btn-clear" @click="closePage(indexPage)"></button>
+						</a>
+					</li>
+
+					<li class="tab-item tab-action">
+						<span>
+							<span class="ri-list-unordered"></span>
+							<span class="ri-delete-bin-3-line"></span>
+
 						</span>
-						<template v-for="(objComponent, indexComponent) in listPages">
-						<span class="chip">
-							<span @click="currentPage = objComponent">{{ objComponent.key }}</span>
-							<span class="ri-close-line ml-1 chip-close" @click="closePage(indexComponent)"></span>
-						</span>
-						</template>
-					</div>
-				</section>
-			</header>
+					</li>
+				</ul>
+			</div>
 
 			<div id="panel-operation-body">
 				<div v-if="currentPage.type === 'component'" id="panel-operation-component">
@@ -232,7 +260,7 @@
 					</div>
 				</div>
 				<div v-else id="panel-operation-homepage" class="scroll-y">
-					homepage
+					<home-page/>
 				</div>
 			</div>
 
@@ -279,6 +307,7 @@ export default {
 			TreePropSingleSelect,
 			TreePropAnnotation,
 			MetaPages,
+			HOMEPAGE,
 
 			PageHomepage: HOMEPAGE,
 
@@ -329,6 +358,11 @@ export default {
 		closePage(indexComponent)
 		{
 			this.listPages.splice(indexComponent, 1);
+
+			if(this.listPages.length <= 0)
+				this.currentPage = this.HOMEPAGE;
+			else
+				this.currentPage = this.listPages[Math.min(this.listPages.length - 1, indexComponent)];
 		},
 		clickNode(node) // 左侧树单击某个节点 准备创建一个新的页面
 		{
@@ -355,7 +389,7 @@ export default {
 
 	},
 	mounted() {
-		this.clickNode(MetaPages[2].children[2]);
+		// this.clickNode(MetaPages[2].children[8]);
 	}
 }
 </script>

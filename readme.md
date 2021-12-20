@@ -1,6 +1,30 @@
-# spectre-css-helper
+# Spectre.css Helper
 
-## dev progresses
+一个交互式生成 **Spectre.css** 组件的小工具.
+
+A small tool to generate **Spectre.css** components
+in a more interactive and convenient way.
+
+## 开发意图 Intention
+
+官方文档 _好读_ 但 _不好用_, 开发的时候还是需要手写很多东西.
+
+这个工具用于简化一部分组件的使用过程.
+
+Official document is easy to _read_
+but little difficult to _use_.
+
+This tool may help to simplify the use of some components.
+
+## 依赖和授权 Dependencies and Licences
+
+* Vue3 [link](https://v3.vuejs.org/)
+* Spectre.css [link](https://picturepan2.github.io/spectre/index.html)
+* Remix Icon [link](https://remixicon.com/)
+* Minecraft Font [link](https://www.fontspace.com/minecraft-font-f28180)
+  * free license for non-commercial use
+
+## 开发进度 Dev Progresses
 
 generators
 
@@ -39,8 +63,8 @@ generators
 - [x] steps
 - [ ] tabs
 - [ ] tiles
-- [ ] toasts
-- [ ] tooltips
+- [x] toasts
+- [x] tooltips
 > for utilities
 - [ ] colors
 - [ ] cursors
@@ -69,8 +93,10 @@ localizations
 - [ ] Chinese
 - [ ] English
 
-## for dev
+## 调试与修改 for dev
+
 ```
+clone repo
 npm install
 npm run serve
 npm run build

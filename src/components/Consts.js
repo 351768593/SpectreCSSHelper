@@ -458,6 +458,70 @@ const PAGE_STEPS = NodeItemPage('steps',[
         },
     }
 ]);
+const PAGE_TOASTS = NodeItemPage('toasts',[
+    NodePropsString('text','toast text'),
+    NodePropsBool('has-clear',true),
+],[
+    {
+        ctx: 'gen-toasts-primary', inline: true,
+        func: ([text,hasClear])=>{
+            return `<div class="toast">
+${hasClear ? '<button class="btn btn-clear float-right"></button>' : ''}
+${text}
+</div>`;
+        },
+    },
+    {
+        ctx: 'gen-toasts-success', inline: true,
+        func: ([text,hasClear])=>{
+            return `<div class="toast toast-success">
+${hasClear ? '<button class="btn btn-clear float-right"></button>' : ''}
+${text}
+</div>`;
+        },
+    },
+    {
+        ctx: 'gen-toasts-warning', inline: true,
+        func: ([text,hasClear])=>{
+            return `<div class="toast toast-warning">
+${hasClear ? '<button class="btn btn-clear float-right"></button>' : ''}
+${text}
+</div>`;
+        },
+    },
+    {
+        ctx: 'gen-toasts-error', inline: true,
+        func: ([text,hasClear])=>{
+            return `<div class="toast toast-error">
+${hasClear ? '<button class="btn btn-clear float-right"></button>' : ''}
+${text}
+</div>`;
+        },
+    },
+],[
+    { key: 'document', url: 'https://picturepan2.github.io/spectre/components/toasts.html' },
+]);
+const PAGE_TOOLTIPS = NodeItemPage('tooltips',[
+    NodePropsSingleSelect('dom','button',['button','span']),
+    NodePropsSingleSelect('position','top',['top','right','bottom','left']),
+    NodePropsString('text-dom','dom text'),
+    NodePropsString('text-tooltip','tooltip text'),
+],[
+    {
+        ctx: 'gen-tooltips', inline: true,
+        func: ([dom,position,textDom,textTooltip])=>{
+            let strPositionTooltip = '';
+            switch(position)
+            {
+                case 'bottom': strPositionTooltip = ' tooltip-bottom'; break;
+                case 'left': strPositionTooltip = ' tooltip-left'; break;
+                case 'right': strPositionTooltip = ' tooltip-right'; break;
+            }
+            if(dom === 'button') strPositionTooltip += ' btn';
+            return `<${dom} class="tooltip${strPositionTooltip}" data-tooltip="${textTooltip}">${textDom}</${dom}>`;
+        },
+    }
+]);
 
 // experimentals
 const PAGE_PARALLAX = NodeItemPage('parallax',[
@@ -558,6 +622,8 @@ const MetaPages = [
         PAGE_EMPTY_STATES,
         PAGE_CHIPS,
         PAGE_STEPS,
+        PAGE_TOASTS,
+        PAGE_TOOLTIPS,
     ]),
     NodeGroup('p-utilities'),
     NodeGroup('p-experimentals',[

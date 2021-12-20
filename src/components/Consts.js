@@ -55,9 +55,11 @@ const TreeItemPage = Symbol('item-page');
 const TreePropString = Symbol('prop-string');
 const TreePropNumber = Symbol('prop-number');
 const TreePropSlider = Symbol('prop-slider');
+const TreePropColor = Symbol('prop-color');
 const TreePropBool = Symbol('prop-bool');
 const TreePropMultiSelect = Symbol('prop-multi-select');
 const TreePropSingleSelect = Symbol('prop-single-select');
+const TreePropAnnotation = Symbol('prop-annotation');
 
 function checkString(key, msg)
 {
@@ -88,11 +90,21 @@ function NodeGroup(key = '', children = []) // 表示一个组 点击之后控�
     checkArray(children, [TreeGroup, TreeItemPageSingle, TreeItemPage], 'error group child type');
     return { tt: TreeGroup, key, children };
 }
-function NodeItemPage(key = '', props = [], generators = []) // 表示一个具体的组件 含有若干可调配置 另外含有若干HTML生成器
+function NodeItemPage(key = '',
+                      props = [],
+                      generators = [],
+                      listUrl = [],
+                      listUnimplemented = []
+) // 表示一个具体的组件 含有若干可调配置 另外含有若干HTML生成器
 {
     checkString(key, 'error item-page key');
-    checkArray(props, [TreePropString,TreePropNumber,TreePropSlider,TreePropBool,TreePropMultiSelect,TreePropSingleSelect], 'error contents props');
-    return { tt: TreeItemPage, key, props, generators };
+    checkArray(props, [
+        TreePropString,TreePropNumber,
+        TreePropSlider,TreePropColor,
+        TreePropBool,TreePropMultiSelect,
+        TreePropSingleSelect
+    ], 'error contents props');
+    return { tt: TreeItemPage, key, props, generators, listUrl, listUnimplemented };
 }
 function NodeProps(key = '', type, defaultValue ) // 表示一个可配置项 这个function不能直接使用 只能给子function使用
 {
@@ -111,6 +123,10 @@ function NodePropsSlider(key, defaultValue, minValue, maxValue, stepValue, minTe
 {
     return Object.assign(NodeProps(key, TreePropSlider, defaultValue), { minValue, maxValue, stepValue, minText, maxText })
 }
+function NodePropsColor(key, defaultValue)
+{
+    return Object.assign(NodeProps(key, TreePropColor, defaultValue));
+}
 function NodePropsBool(key, defaultValue = false)
 {
     return NodeProps(key, TreePropBool, defaultValue);
@@ -122,6 +138,10 @@ function NodePropsMultiSelect(key, defaultValue = '', options = [])
 function NodePropsSingleSelect(key, defaultValue = '', options = [])
 {
     return Object.assign(NodeProps(key, TreePropSingleSelect, defaultValue), { options });
+}
+function NodePropsAnnotation(key, i18nKey = '', style = '')
+{
+    return Object.assign(NodeProps(key, TreePropAnnotation, i18nKey), { style });
 }
 
 function setContext(node, contextParent)
@@ -164,6 +184,7 @@ function setContext(node, contextParent)
     }
 }
 
+// elements
 const PAGE_TABLES = NodeItemPage('tables', [
     NodePropsBool('striped', true),
     NodePropsBool('hover', true),
@@ -271,6 +292,226 @@ const PAGE_BUTTONS = NodeItemPage('buttons',[
     },
 ]);
 
+// components
+const PAGE_AVATARS = NodeItemPage('avatars',[
+    NodePropsString('avatar-url',''),
+    NodePropsString('avatar-text','Fi'),
+    NodePropsSingleSelect('size','default',['xl','lg','default','sm','xs']),
+    NodePropsSingleSelect('presence','none',['none','online','busy','away','offline']),
+],[
+    {
+        ctx: 'gen-avatars', inline: 'true',
+        func: ([url,text,size,presence])=>{
+            let strClassSize = 'avatar';
+            switch (size)
+            {
+                case 'xl': strClassSize += ' avatar-xl'; break;
+                case 'lg': strClassSize += ' avatar-lg'; break;
+                case 'sm': strClassSize += ' avatar-sm'; break;
+                case 'xs': strClassSize += ' avatar-xs'; break;
+            }
+            let domPresence = '';
+            const domPresenceOnline = `<i class="avatar-presence online"></i>`;
+            const domPresenceBusy = `<i class="avatar-presence busy"></i>`;
+            const domPresenceAway = `<i class="avatar-presence away"></i>`;
+            const domPresenceOffline = `<i class="avatar-presence offline"></i>`;
+            switch (presence)
+            {
+                case 'online': domPresence = domPresenceOnline; break;
+                case 'busy': domPresence = domPresenceBusy; break;
+                case 'away': domPresence = domPresenceAway; break;
+                case 'offline': domPresence = domPresenceOffline; break;
+            }
+            return `<figure class="${strClassSize}" 
+${text !== '' ? 'data-initial="'+text+'"' : ''}>
+${url !== '' ? `<img src="${url}">` : ''}
+${domPresence}
+</figure>`;
+        },
+    }
+],[
+    { key: 'document', url: 'https://picturepan2.github.io/spectre/components/avatars.html' },
+],[
+    { key: 'avatar-icons' }
+]);
+const PAGE_BADGES = NodeItemPage('badges',[
+    NodePropsString('text','inner text'),
+    NodePropsString('data-badge','1'),
+    NodePropsString('data-avatar-url',''),
+    NodePropsString('data-avatar-text','Fi'),
+],[
+    {
+        ctx: 'gen-badges-span', inline: true,
+        func: ([text,dataBadge,avatarUrl,avatarText])=>{
+            return `<span class="badge" ${dataBadge !== '' ? 'data-badge="'+dataBadge+'"' : ''}>${text}</span>`;
+        },
+    },
+    {
+        ctx: 'gen-badges-button', inline: true,
+        func: ([text,dataBadge,avatarUrl,avatarText])=>{
+            return `<button class="btn badge" ${dataBadge !== '' ? 'data-badge="'+dataBadge+'"' : ''}>${text}</button>`;
+        },
+    },
+    {
+        ctx: 'gen-badges-button', inline: true,
+        func: ([text,dataBadge,avatarUrl,avatarText])=>{
+            return `<figure class="avatar badge"
+${dataBadge !== '' ? 'data-badge="'+dataBadge+'"' : ''}
+${avatarText !== '' ? 'data-initial="'+avatarText+'"' : ''}
+><img src="${avatarUrl}"/></figure>`;
+        },
+    },
+]);
+const PAGE_BARS = NodeItemPage('bars',[
+    NodePropsSingleSelect('size','default',['default','sm']),
+    NodePropsSlider('percentage',50,0,100,1,'0','100%'),
+    NodePropsColor('color','#818bd5'),
+    NodePropsBool('has-Text',true),
+    NodePropsBool('has-tooltip',true),
+],[
+    {
+        ctx: 'gen-bars', inline: false,
+        func: ([size,percentage,color,hasText,hasTooltip])=>{
+            const isSm = size === 'sm';
+            return `<div class="bar${isSm ? ' bar-sm':''}">
+  <div class="bar-item${hasTooltip ? ' tooltip' : ''}"${hasTooltip ? ' data-tooltip="' + percentage + '%"' : ''} role="progressbar"
+  style="width:${percentage}%;background: ${color}"
+  aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100" >
+  ${hasText && !isSm && percentage > 0 ? percentage + '%' : ''}
+</div>
+</div>`;
+        },
+    }
+],[
+    { key: 'document', url: 'https://picturepan2.github.io/spectre/components/bars.html' },
+],);
+// const PAGE_BARS_SILDER = NodeItemPage();
+const PAGE_BREADCRUMBS = NodeItemPage('breadcrumbs',[
+    NodePropsSlider('count-step',3,2,5,1,'2','5'),
+    NodePropsBool('has-tooltip',false),
+],[
+    {
+        ctx: 'gen-breadcrumbs', inline: false,
+        func: ([countStep,hasTooltip])=>{
+
+            let crumbs = '';
+            for(let step = 0; step < countStep; step++)
+            {
+                let crumbInner = hasTooltip ? `<a href="#" class="tooltip" data-tooltip="${step + 1}">${step + 1}</a>` : `<a href="#">${step + 1}</a>`;
+                crumbs += `<li class="breadcrumb-item">`+crumbInner+`</li>`;
+            }
+
+            return `<ul class="breadcrumb">\n${crumbs}\n</ul>`;
+        },
+    }
+]);
+const PAGE_CHIPS = NodeItemPage('chips',[
+    NodePropsString('text','chip text'),
+    NodePropsBool('has-avatar',true),
+    NodePropsString('avatar-url',''),
+    NodePropsBool('has-close',true),
+],[
+    {
+        ctx: 'gen-chips', inline: true,
+        func: ([text,hasAvatar,avatarUrl,hasClose])=>{
+            return `<span class="chip">
+${hasAvatar ? '<img src="'+avatarUrl+'" class="avatar avatar-sm" alt=""/>\n' : ''}${text}${hasClose ? '\n<a href="#" class="btn btn-clear" aria-label="close" role="button"></a>' : ''}
+</span>`;
+        },
+    }
+]);
+const PAGE_EMPTY_STATES = NodeItemPage('empty-states',[
+    NodePropsString('icon-class','icon icon-3x icon-people'),
+    NodePropsString('title','title text'),
+    NodePropsString('subtitle','subtitle text'),
+    NodePropsBool('has-action',false),
+],[
+    {
+        ctx: 'gen-empty-states', inline: false,
+        func: ([iconClass,title,subtitle,hasAction])=>{
+            return `<div class="empty">
+  <div class="empty-icon">
+    <i class="${iconClass}"></i>
+  </div>
+  <p class="empty-title h5">${title}</p>
+  <p class="empty-subtitle">${subtitle}</p>${hasAction ? '\n<div class="empty-action">\naction container</div>':''}
+</div>`;
+        },
+    }
+]);
+const PAGE_STEPS = NodeItemPage('steps',[
+    NodePropsSlider('count-step',3,2,5,1,'2','5'),
+    NodePropsSlider('active-step',3,2,5,1,'2','5'),
+    NodePropsBool('has-tooltip',true),
+    NodePropsBool('has-text',true),
+],[
+    {
+        ctx: 'gen-steps', inline: false,
+        func: ([countStep,activeStep,hasTooltip,hasText])=>{
+            let steps = ``;
+            for(let step = 0; step < countStep; step++)
+            {
+                let stepInner = hasTooltip ? `<a href="#" class="tooltip" data-tooltip="tooltip ${step + 1}">${hasText ? 'step ' + (step + 1) : ''}</a>` : `<a href="#">${hasText ? 'step ' + (step + 1) : ''}</a>`;
+                steps += `\n<li class="step-item${activeStep === step + 1 ? ' active' : ''}">\n${stepInner}\n</li>\n`;
+            }
+            return `<ul class="step">${steps}</ul>`;
+        },
+    }
+]);
+
+// experimentals
+const PAGE_PARALLAX = NodeItemPage('parallax',[
+    NodePropsString('text','parallax text'),
+    NodePropsSingleSelect('dom','h2',['h1','h2','h3','h4','h5','h6','div']),
+    NodePropsString('img-url','https://via.placeholder.com/250.gif/2db38a/4a22c0?text=placeholder+picture'),
+],[
+    {
+        ctx: 'gen-parallax', inline: false,
+        func: ([text,dom,imgUrl])=>{
+            return `<div class="parallax">
+  <div class="parallax-top-left" tabindex="1"></div>
+  <div class="parallax-top-right" tabindex="2"></div>
+  <div class="parallax-bottom-left" tabindex="3"></div>
+  <div class="parallax-bottom-right" tabindex="4"></div>
+  <div class="parallax-content">
+    <div class="parallax-front">
+      <${dom}>${text}</${dom}>
+    </div>
+    <div class="parallax-back">
+      <img src="${imgUrl}" class="img-responsive rounded" alt=""/>
+    </div>
+  </div>
+</div>`;
+        },
+    }
+]);
+const PAGE_PROGRESS = NodeItemPage('progress',[
+    NodePropsNumber('max',100,'','',1),
+    NodePropsBool('loading',false),
+    NodePropsNumber('value',50,'','',1),
+],[
+    {
+        ctx: 'gen-progress', inline: true,
+        func: ([max, loading, value])=>{
+            return `<progress class="progress" max="${max}" ${loading ? '' : 'value="' + value + '"'}></progress>`;
+        },
+    },
+]);
+const PAGE_SLIDER = NodeItemPage('sliders',[
+    NodePropsNumber('min',0,'',''),
+    NodePropsNumber('max',100,'',''),
+    NodePropsNumber('value',50,'',''),
+    NodePropsBool('tooltip',true),
+    NodePropsAnnotation('about-tooltip','page-slider-about-tooltip'),
+],[
+    {
+        ctx: 'gen-slider', inline: true,
+        func: ([min,max,value,tooltip])=>{
+            return `<input class="${tooltip ? 'slider tooltip' : 'slider'}" type="range" min="${min}" max="${max}" value="${value}"/>`;
+        },
+    }
+]);
+
 const MetaPages = [
     // NodeItemPageSingle('home', 'ri-home-line'),
     NodeGroup('p-elements',[
@@ -309,9 +550,21 @@ const MetaPages = [
         ]),
     ]),
     NodeGroup('p-layout'),
-    NodeGroup('p-components'),
+    NodeGroup('p-components',[
+        PAGE_AVATARS,
+        PAGE_BADGES,
+        PAGE_BARS,
+        PAGE_BREADCRUMBS,
+        PAGE_EMPTY_STATES,
+        PAGE_CHIPS,
+        PAGE_STEPS,
+    ]),
     NodeGroup('p-utilities'),
-    NodeGroup('p-experimentals'),
+    NodeGroup('p-experimentals',[
+        PAGE_PARALLAX,
+        PAGE_PROGRESS,
+        PAGE_SLIDER,
+    ]),
 ];
 for(let meta of MetaPages)
 {
@@ -328,7 +581,9 @@ export {
     TreePropString,
     TreePropNumber,
     TreePropSlider,
+    TreePropColor,
     TreePropBool,
     TreePropMultiSelect,
     TreePropSingleSelect,
+    TreePropAnnotation,
 };

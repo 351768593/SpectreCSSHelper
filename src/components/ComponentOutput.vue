@@ -13,7 +13,7 @@
 }
 .output-display
 {
-	margin: 20px;
+	margin: 20px 0 0 20px;
 	border: 1px dashed #cbcbcb;
 }
 .output-display:hover
@@ -26,7 +26,7 @@
 <template>
 <div class="output-base" :class="generator.inline ? 'd-inline-block' : 'd-block'">
 	<div class="output-info">{{generator.ctx}}</div>
-	<div class="output-display" :style="styleDisplay">
+	<div class="output-display text-center" :style="styleDisplay">
 		<div v-html="html"></div>
 	</div>
 </div>

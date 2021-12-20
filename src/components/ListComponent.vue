@@ -7,7 +7,7 @@
 </style>
 
 <template>
-	<div v-for="nodeRoot in Metas">
+	<div v-for="nodeRoot in Metas" :key="nodeRoot.ctx">
 		<list-component-node :node="nodeRoot" :highlighted="currentComponent" @click-node="clickNode($event)"/>
 	</div>
 </template>

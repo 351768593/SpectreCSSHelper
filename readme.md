@@ -23,14 +23,14 @@ generators
 - [x] buttons
 - [ ] form-input
 - [ ] form-textarea
-- [ ] form-select
-- [ ] form-radio
-- [ ] form-switch
+- [x] form-select
+- [x form-radio
+- [x] form-switch
 - [x] form-checkbox
 - [ ] icons
-- [ ] code
+- [x] code
 - [x] media-image
-- [ ] media-video
+- [x] media-video
 > for layout
 - [x] hero
 - [x] navbar

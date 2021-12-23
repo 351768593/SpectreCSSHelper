@@ -147,10 +147,96 @@ const PAGE_TYPOGRAPHY = NodePage('typography', [
     { key: 'document', url: 'https://picturepan2.github.io/spectre/elements/typography.html' },
 ],[]);
 const PAGE_FORM_INPUT = NodePage('form-input',[],[]);
-const PAGE_FORM_TEXTAREA = NodePage('form-textarea',[],[]);
-const PAGE_FORM_SELECT = NodePage('form-select',[],[]);
-const PAGE_FORM_RADIO = NodePage('form-radio',[],[]);
-const PAGE_SWITCH = NodePage('form-switch',[],[]);
+const PAGE_FORM_TEXTAREA = NodePage('form-textarea',[
+    PropString('label-text','label text'),
+    PropString('placeholder','placeholder'),
+    PropSlider('rows',3,2,10,1,'2','10'),
+],[
+    {
+        ctx: 'gen-textarea', inline: false,
+        func: ([label,placeholder,rows])=>{
+            return `<div class="form-group">
+  <label class="form-label" for="textarea_demo">${label}</label>
+  <textarea class="form-input" id="textarea_demo" placeholder="${placeholder}" rows="${rows}"></textarea>
+</div>`;
+        },
+    },
+]);
+function SELECT_BODY(count)
+{
+    let body = '';
+    for(let step = 0; step < count; step++)
+    {
+        body += `<option>option ${step + 1}</option>`;
+    }
+
+    return body;
+}
+const PAGE_FORM_SELECT = NodePage('form-select',[
+    PropSlider('count-option',3,2,6,1,'2','6'),
+],[
+    {
+        ctx: 'gen-select', inline: true,
+        func: ([count])=>{
+            let body = SELECT_BODY(count);
+            return `<div class="form-group">
+  <select class="form-select">
+    ${body}
+  </select>
+</div>`;
+        },
+    },
+    {
+        ctx: 'gen-select-multiple', inline: true,
+        func: ([count])=>{
+            let body = SELECT_BODY(count);
+            return `<div class="form-group">
+  <select class="form-select" multiple>
+    ${body}
+  </select>
+</div>`;
+        },
+    },
+]);
+const PAGE_FORM_RADIO = NodePage('form-radio',[
+    PropSlider('count-item',2,2,5,1,'2','5'),
+    PropBool('inline',false),
+],[
+    {
+        ctx: 'gen-radio', inline: true,
+        func: ([count,inline])=>{
+            let body = ``;
+            for(let step = 0; step < count; step++)
+            {
+                body += `<label class="form-radio${inline ? ' form-inline' : ''}">
+    <input type="radio" name="radio_group"${step === 0 ? ' checked' : ''}>
+    <i class="form-icon"></i> radio-item-${step + 1}
+  </label>`;
+            }
+
+            return `<div class="form-group">
+  <label class="form-label">radio text</label>
+  ${body}
+</div>`;
+        },
+    }
+]);
+const PAGE_SWITCH = NodePage('form-switch',[
+    PropString('text','label text'),
+    PropBool('inline',false),
+],[
+    {
+        ctx: 'gen-switch', inline: true,
+        func: ([text,inline])=>{
+            return `<div class="form-group">
+  <label class="form-switch${inline ? ' form-inline':''}">
+    <input type="checkbox">
+    <i class="form-icon"></i> ${text}
+  </label>
+</div>`;
+        },
+    }
+]);
 const PAGE_CHECKBOX = NodePage('form-checkbox',[
     PropString('label-text','label text'),
     PropSingleSelect('state','unchecked',['unchecked','checked','indeterminate']),
@@ -202,7 +288,30 @@ ${domImage}
         },
     }
 ]);
-const PAGE_MEDIA_VIDEO = NodePage('media-video',[],[]);
+const PAGE_MEDIA_VIDEO = NodePage('media-video',[
+    PropSingleSelect('style','responsive',['responsive','4-3','1-1']),
+    PropSingleSelect('type','video',['video','iframe']),
+],[
+    {
+        ctx: 'gen-video', inline: false,
+        func: ([style,type])=>{
+            let strClass = 'video-responsive';
+            if(style === '4-3') strClass += ' video-responsive-4-3';
+            else if(style === '1-1') strClass += ' video-responsive-1-1';
+
+            if(type === 'video')
+            {
+                return `<video class="${strClass}" src="..."></video>`;
+            }
+            else if(type === 'iframe')
+            {
+                return `<div class="${strClass}">
+  <iframe src="//player.bilibili.com/player.html?aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>`;
+            }
+        },
+    }
+]);
 
 const PAGE_TABLES = NodePage('tables', [
     PropBool('striped', true),

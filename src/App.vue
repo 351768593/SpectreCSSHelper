@@ -35,13 +35,13 @@
 	justify-content: space-between;
 	align-items: stretch;
 }
-#panel-operation-header
-{
-	flex-grow: 0;
-	flex-shrink: 1;
+/*#panel-operation-header*/
+/*{*/
+/*	flex-grow: 0;*/
+/*	flex-shrink: 1;*/
 
-	width: 100%;
-}
+/*	width: 100%;*/
+/*}*/
 #panel-operation-body
 {
 	flex-grow: 1;
@@ -52,38 +52,6 @@
 #panel-list-component-base
 {
 	width: 200px;
-}
-#header-chips-base
-{
-	overflow: hidden;
-
-	width: 100%;
-	height: 28px;
-}
-#header-chips-inner
-{
-	overflow-y: hidden;
-	overflow-x: scroll;
-	width: 100%;
-	height: calc(100% + 17px);
-	position: relative;
-	top: 8px;
-
-	white-space: nowrap;
-}
-
-.navbar-section .chip
-{
-	background-color: #727272;
-}
-
-.chip
-{
-	cursor: pointer;
-}
-.chip-close:hover
-{
-	color: #9494d0;
 }
 
 #panel-operation-component
@@ -111,7 +79,7 @@
 <template>
 	<div id="body-base">
 		<div id="panel-list-component-base"
-		     class="bg-gray scroll-y">
+		     class="bg-gray scroll-y" v-show="isShowLeftListComponent">
 			<list-component :current-component="currentPage"
 			                @click-node="clickNode($event)"/>
 		</div>
@@ -119,10 +87,20 @@
 		<div id="panel-operation-base">
 			<div>
 				<ul class="tab">
-					<li class="tab-item" :class="currentPage?.type === 'homepage' ? ' active' : ''"
-					    @click="currentPage = HOMEPAGE">
-						<a href="#">homepage</a>
+					<li class="tab-item active" v-if="currentPage.type === 'empty'">
+						<a>
+							<span class="text-gray">
+								empty page
+							</span>
+						</a>
 					</li>
+
+					<li class="tab-item active" v-if="currentPage.type === 'about-installation'">
+						<a>
+							installation
+						</a>
+					</li>
+
 					<li class="tab-item"
 					    :class="currentPage === page ? ' active' : ''"
 					    v-for="(page,indexPage) in listPages">
@@ -134,9 +112,8 @@
 
 					<li class="tab-item tab-action">
 						<span>
-							<span class="ri-list-unordered"></span>
-							<span class="ri-delete-bin-3-line"></span>
-
+							<span class="ri-list-unordered" @click="isShowLeftListComponent = !isShowLeftListComponent"></span>
+							<span class="ri-delete-bin-3-line" @click="closeAllPages()"></span>
 						</span>
 					</li>
 				</ul>
@@ -246,6 +223,14 @@
 <!--					<home-page/>-->
 					主页
 				</div>
+				<div v-else-if="currentPage.type === 'empty'" style="height: 100%">
+					<div class="empty" style="height: 100%">
+						<div class="empty-icon">
+							<i class="ri-loader-2-line ri-3x"></i>
+						</div>
+						<p class="empty-title h5">no pages</p>
+					</div>
+				</div>
 			</div>
 
 		</div>
@@ -271,7 +256,8 @@ import {
 import MetaPages from "@/components/meta/Pages.js";
 import ComponentOutput from "@/components/ComponentOutput";
 
-const HOMEPAGE = { type: 'homepage' };
+const EMPTY_PAGE = { type: 'empty' };
+const INSTALLATION_PAGE = { type: 'about-installation' };
 
 export default {
 	name: 'App',
@@ -291,15 +277,15 @@ export default {
 			TreePropSingleSelect,
 			TreePropAnnotation,
 			MetaPages,
-			HOMEPAGE,
 
-			PageHomepage: HOMEPAGE,
+			EMPTY_PAGE,
+			INSTALLATION_PAGE,
 
 			// 打开的组件列表
 			listPages: [
 			],
 			// 当前的组件
-			currentPage: HOMEPAGE,
+			currentPage: EMPTY_PAGE,
 			// 是否展示左侧组件目录
 			isShowLeftListComponent: true,
 			// 是否展示代码
@@ -344,9 +330,14 @@ export default {
 			this.listPages.splice(indexComponent, 1);
 
 			if(this.listPages.length <= 0)
-				this.currentPage = this.HOMEPAGE;
+				this.currentPage = this.EMPTY_PAGE;
 			else
 				this.currentPage = this.listPages[Math.min(this.listPages.length - 1, indexComponent)];
+		},
+		closeAllPages()
+		{
+			this.listPages.splice(0,this.listPages.length);
+			this.currentPage = this.EMPTY_PAGE;
 		},
 		clickNode(node) // 左侧树单击某个节点 准备创建一个新的页面
 		{
@@ -373,7 +364,7 @@ export default {
 
 	},
 	mounted() {
-		this.clickNode(MetaPages[0].children[11]);
+		// this.clickNode(MetaPages[0].children[4]);
 	}
 }
 </script>

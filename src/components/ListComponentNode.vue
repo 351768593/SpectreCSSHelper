@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { TreeGroup, TreeItemPage, TreeItemPageSingle } from './Consts';
+import { TreeGroup, TreeItemPage, TreeItemPageSingle } from './meta/Consts';
 
 export default {
 	name: "ListComponentNode",

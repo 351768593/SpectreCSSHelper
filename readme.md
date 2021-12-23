@@ -5,17 +5,6 @@
 A small tool to generate **Spectre.css** components
 in a more interactive and convenient way.
 
-## 开发意图 Intention
-
-官方文档 _好读_ 但 _不好用_, 开发的时候还是需要手写很多东西.
-
-这个工具用于简化一部分组件的使用过程.
-
-Official document is easy to _read_
-but little difficult to _use_.
-
-This tool may help to simplify the use of some components.
-
 ## 依赖和授权 Dependencies and Licences
 
 * Vue3 [link](https://v3.vuejs.org/)
@@ -29,7 +18,7 @@ This tool may help to simplify the use of some components.
 generators
 
 > for elements
-- [ ] typography
+- [x] typography
 - [x] tables 
 - [x] buttons
 - [ ] form-input
@@ -37,13 +26,14 @@ generators
 - [ ] form-select
 - [ ] form-radio
 - [ ] form-switch
-- [ ] form-checkbox
+- [x] form-checkbox
 - [ ] icons
 - [ ] code
-- [ ] media
+- [x] media-image
+- [ ] media-video
 > for layout
-- [ ] hero
-- [ ] media
+- [x] hero
+- [x] navbar
 > for components
 - [ ] accordions
 - [x] avatars
@@ -59,21 +49,18 @@ generators
 - [ ] nav
 - [ ] pagination
 - [ ] panels
-- [ ] popovers
+- [x] popovers
 - [x] steps
-- [ ] tabs
+- [x] tabs
 - [ ] tiles
 - [x] toasts
 - [x] tooltips
 > for utilities
-- [ ] colors
-- [ ] cursors
 - [ ] display
 - [ ] divider
 - [ ] loading
 - [ ] position
 - [ ] shapes
-- [ ] text
 > for experimentals
 - [ ] 360-degree viewer
 - [ ] autocomplete
@@ -87,6 +74,10 @@ generators
 - [x] progress
 - [x] slider
 - [ ] timelines
+
+pages
+
+- [ ] installation of Spectre.css
 
 localizations
 

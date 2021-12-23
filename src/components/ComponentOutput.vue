@@ -2,18 +2,19 @@
 .output-base
 {
 }
-.output-info
+.output-title
 {
-	float: right;
-	margin-right: 20px;
+	text-align: right;
+	font-size: 16px;
+	line-height: 16px;
 }
-.output-ctx
+.output-title-text
 {
-	;
+	vertical-align: top;
 }
 .output-display
 {
-	margin: 20px 0 0 20px;
+	margin: 0 0 20px 0;
 	border: 1px dashed #cbcbcb;
 }
 .output-display:hover
@@ -25,8 +26,14 @@
 
 <template>
 <div class="output-base" :class="generator.inline ? 'd-inline-block' : 'd-block'">
-	<div class="output-info">{{generator.ctx}}</div>
-	<div class="output-display text-center" :style="styleDisplay">
+	<div class="output-title">
+		<span class="output-title-text">{{generator.ctx}}</span>
+		<span class="output-title-operation px-1">
+			<span class="ri-code-s-slash-line mx-1"></span>
+			<span class="ri-file-copy-2-line ml-1"></span>
+		</span>
+	</div>
+	<div class="output-display" :style="styleDisplay">
 		<div v-html="html"></div>
 	</div>
 </div>

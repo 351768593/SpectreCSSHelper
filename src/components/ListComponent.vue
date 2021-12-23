@@ -13,8 +13,25 @@
 </template>
 
 <script>
-import { TypePages, MetaPages } from './Consts';
+// import { TypePages, MetaPages } from './meta/Consts';
+import {
+	TreeGroup,
+	TreeItemPageSingle,
+	TreeItemPage,
+	TreePropString,
+	TreePropNumber,
+	TreePropSlider,
+	TreePropColor,
+	TreePropBool,
+	TreePropMultiSelect,
+	TreePropSingleSelect,
+	TreePropAnnotation,
+} from "@/components/meta/Consts";
+import MetaPages from "@/components/meta/Pages";
 import ListComponentNode from "@/components/ListComponentNode";
+
+// console.log('list-component', Pages, MetaPages);
+
 export default {
 	name: "ListComponent",
 	components: {ListComponentNode},
@@ -24,7 +41,19 @@ export default {
 	emits: ['clickNode'],
 	data() {
 		return {
-			Pages: TypePages,
+			Pages: {
+				TreeGroup,
+				TreeItemPageSingle,
+				TreeItemPage,
+				TreePropString,
+				TreePropNumber,
+				TreePropSlider,
+				TreePropColor,
+				TreePropBool,
+				TreePropMultiSelect,
+				TreePropSingleSelect,
+				TreePropAnnotation,
+			},
 			Metas: MetaPages,
 			isOpenElement: true,
 			isOpenLayout: true,

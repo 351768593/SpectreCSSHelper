@@ -99,7 +99,7 @@
 #panel-content-base
 {
 	flex-grow: 0;
-	min-width: 250px;
+	width: 300px;
 }
 #panel-output-base
 {
@@ -117,26 +117,6 @@
 		</div>
 
 		<div id="panel-operation-base">
-<!--			<header class="navbar bg-dark px-2" id="panel-operation-header">-->
-<!--				<section class="navbar-section" id="header-chips-base">-->
-<!--					&lt;!&ndash; 隐藏内部滚动条 &ndash;&gt;-->
-<!--					<div id="header-chips-inner">-->
-<!--						<span class="chip c-hand" @click="currentPage = PageHomepage">-->
-<!--							<span class="ri-home-4-line mr-1"></span>-->
-<!--							home-->
-<!--						</span>-->
-<!--						<template v-for="(objComponent, indexComponent) in listPages">-->
-<!--						<span class="chip">-->
-<!--							<span @click="currentPage = objComponent">{{ objComponent.key }}</span>-->
-<!--							<span class="ri-close-line ml-1 chip-close" @click="closePage(indexComponent)"></span>-->
-<!--						</span>-->
-<!--						</template>-->
-<!--					</div>-->
-<!--				</section>-->
-<!--				<section class="navbar-section" style="font-family: 'Minecraft Bold'; user-select: none">-->
-<!--					<img src="heart.png" style="height: 12px; image-rendering: pixelated; margin-right: 8px;"/> x 30-->
-<!--				</section>-->
-<!--			</header>-->
 			<div>
 				<ul class="tab">
 					<li class="tab-item" :class="currentPage?.type === 'homepage' ? ' active' : ''"
@@ -174,6 +154,9 @@
 							</a>
 						</div>
 						<div style="user-select: none">
+							<div v-if="currentPage.props?.length === 0">
+								无配置项
+							</div>
 							<div v-for="(prop,indexProp) in currentPage.props" :key="prop.ctx">
 								<!-- 文本输入框 -->
 								<div class="form-group" v-if="prop.tt === TreePropString">
@@ -219,7 +202,7 @@
 								<!-- 单选 -->
 								<div class="form-group" v-else-if="prop.tt === TreePropSingleSelect">
 									<label class="form-label">{{prop.ctx}}</label>
-									<label class="form-radio"
+									<label class="form-radio form-inline"
 									       v-for="option in prop.options"
 									       @click.prevent="prop.currentValue = option">
 										<input type="radio" :name="'PROP-' + prop.ctx"
@@ -230,7 +213,7 @@
 								<!-- 多选 -->
 								<div class="form-group" v-else-if="prop.tt === TreePropMultiSelect">
 									<label class="form-label" :for="'PROP-' + prop.ctx">{{prop.ctx}}</label>
-									<label class="form-checkbox"
+									<label class="form-checkbox  form-inline"
 									       v-for="option in prop.options"
 									       @click.prevent="prop.currentValue.indexOf(option) >= 0 ? prop.currentValue.splice(prop.currentValue.indexOf(option),1) : prop.currentValue.push(option)">
 										<input type="checkbox"
@@ -249,18 +232,19 @@
 					</div>
 
 					<div id="panel-output-base" class="scroll-y">
-						<div v-if="currentComponentOutput?.length">
+						<div v-if="currentComponentOutput?.length" style="margin: 14px 14px 0 14px">
 							<component-output v-for="output in currentComponentOutput"
 							                  :generator="output.generator"
 							                  :html="output.html"/>
 						</div>
-						<div v-else-if="currentPage.type === 'homepage'">
+						<div v-else-if="currentComponentOutput?.length === 0">
 							无输出项
 						</div>
 					</div>
 				</div>
-				<div v-else id="panel-operation-homepage" class="scroll-y">
-					<home-page/>
+				<div v-else-if="currentPage.type === 'about-installation'" id="panel-operation-homepage" class="scroll-y">
+<!--					<home-page/>-->
+					主页
 				</div>
 			</div>
 
@@ -283,8 +267,8 @@ import {
 	TreePropMultiSelect,
 	TreePropSingleSelect,
 	TreePropAnnotation,
-	MetaPages
-} from "@/components/Consts";
+} from "@/components/meta/Consts";
+import MetaPages from "@/components/meta/Pages.js";
 import ComponentOutput from "@/components/ComponentOutput";
 
 const HOMEPAGE = { type: 'homepage' };
@@ -389,7 +373,7 @@ export default {
 
 	},
 	mounted() {
-		// this.clickNode(MetaPages[2].children[8]);
+		this.clickNode(MetaPages[0].children[11]);
 	}
 }
 </script>

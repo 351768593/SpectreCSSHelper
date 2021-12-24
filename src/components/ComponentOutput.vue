@@ -1,6 +1,7 @@
 <style scoped>
 .output-base
 {
+	margin-left: 12px;
 }
 .output-title
 {
@@ -27,13 +28,13 @@
 <template>
 <div class="output-base" :class="generator.inline ? 'd-inline-block' : 'd-block'">
 	<div class="output-title">
-		<span class="output-title-text">{{generator.ctx}}</span>
+		<span class="output-title-text text-gray text-small">{{generator.ctx}}</span>
 		<span class="output-title-operation px-1">
 			<span class="ri-code-s-slash-line mx-1 c-hand tooltip tooltip-left"
-			      data-tooltip="查看源码"
+			      :data-tooltip="$t('msg-view-code')"
 			      style="color: #9538f2"></span>
 			<span class="ri-file-copy-2-line ml-1 c-hand tooltip tooltip-left"
-			      data-tooltip="复制源码"
+			      :data-tooltip="$t('msg-copy-code')"
 			      style="color: #389bf2"></span>
 		</span>
 	</div>

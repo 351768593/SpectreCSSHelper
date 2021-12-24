@@ -90,30 +90,36 @@
 					<li class="tab-item active" v-if="currentPage.type === 'empty'">
 						<a>
 							<span class="text-gray">
-								empty page
+								{{ $t('p-others.empty.#title') }}
 							</span>
 						</a>
 					</li>
 
-					<li class="tab-item active" v-if="currentPage.type === 'about-installation'">
-						<a>
-							installation
-						</a>
-					</li>
-
-					<li class="tab-item"
+					<li class="tab-item pl-1"
 					    :class="currentPage === page ? ' active' : ''"
 					    v-for="(page,indexPage) in listPages">
 						<a href="#">
-							<span @click="currentPage = page">{{page.key}}</span>
+							<span @click="currentPage = page">
+								{{ $t(page.ctx) }}
+							</span>
 							<button class="btn btn-clear" @click="closePage(indexPage)"></button>
 						</a>
 					</li>
 
 					<li class="tab-item tab-action">
 						<span>
-							<span class="ri-list-unordered" @click="isShowLeftListComponent = !isShowLeftListComponent"></span>
-							<span class="ri-delete-bin-3-line" @click="closeAllPages()"></span>
+							<span class="ri-translate mr-2 c-hand tooltip tooltip-left"
+							      :data-tooltip="$t('msg-switch-translation')"
+							      style="color: #6786b0"
+							      @click="void(0)"></span>
+							<span class="ri-list-unordered mr-2 c-hand tooltip tooltip-left"
+							      :data-tooltip="$t('msg-show-list-component')"
+							      :style="{color: isShowLeftListComponent ? '#ee8e13' : '' }"
+							      @click="isShowLeftListComponent = !isShowLeftListComponent"></span>
+							<span class="ri-delete-bin-3-line mr-2 c-hand tooltip tooltip-left"
+							      :data-tooltip="$t('msg-close-all-pages')"
+							      :style="{color: listPages.length ? '#da157e' : '#a6a6a6' }"
+							      @click="closeAllPages()"></span>
 						</span>
 					</li>
 				</ul>
@@ -132,78 +138,82 @@
 						</div>
 						<div style="user-select: none">
 							<div v-if="currentPage.props?.length === 0">
-								无配置项
+								{{ $t('msg-no-config-item') }}
 							</div>
-							<div v-for="(prop,indexProp) in currentPage.props" :key="prop.ctx">
-								<!-- 文本输入框 -->
-								<div class="form-group" v-if="prop.tt === TreePropString">
-									<label class="form-label" :for="'PROP-' + prop.ctx">{{ prop.ctx }}</label>
-									<input type="text" class="form-input"
-									       :id="'PROP-' + prop.ctx"
-									       v-model="prop.currentValue">
-								</div>
-								<!-- 数字输入框 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropNumber">
-									<label class="form-label" :for="'PROP-' + prop.ctx">{{ prop.ctx }}</label>
-									<input type="number" class="form-input"
-									       :step="prop.stepValue" :min="prop.minValue" :max="prop.maxValue"
-									       :id="'PROP-' + prop.ctx"
-									       v-model="prop.currentValue">
-									<div class="text-gray text-small text-right">
-										{{ prop.minValue }} ~ {{ prop.maxValue }}, {{ prop.stepValue }}
+							<div v-else class="px-2">
+								<div v-for="(prop,indexProp) in currentPage.props" :key="prop.ctx">
+									<!-- 文本输入框 -->
+									<div class="form-group" v-if="prop.type === TreePropString">
+										<label class="form-label" :for="'PROP-' + prop.ctx">{{ $t(prop.ctx) }}</label>
+										<input type="text" class="form-input"
+										       :id="'PROP-' + prop.ctx"
+										       v-model="prop.currentValue">
 									</div>
-								</div>
-								<!-- 布尔型 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropBool">
-									<label class="form-switch">
-										<input type="checkbox" v-model="prop.currentValue">
-										<i class="form-icon"></i> {{ prop.ctx }}
-									</label>
-								</div>
-								<!-- 滑动条 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropSlider">
-									<label class="form-label" :for="'PROP-' + prop.ctx">{{ prop.ctx }}</label>
-									<input type="range" class="slider px-2 tooltip"
-									       :step="prop.stepValue" :min="prop.minValue" :max="prop.maxValue"
-									       :id="'PROP-' + prop.ctx"
-									       v-model.number="prop.currentValue" :data-tooltip="prop.currentValue">
-									<div class="text-gray text-small text-right">
-										{{ prop.minText }} ~ {{ prop.maxText }}
+									<!-- 数字输入框 -->
+									<div class="form-group" v-else-if="prop.type === TreePropNumber">
+										<label class="form-label" :for="'PROP-' + prop.ctx">{{ $t(prop.ctx) }}</label>
+										<input type="number" class="form-input"
+										       :step="prop.stepValue" :min="prop.minValue" :max="prop.maxValue"
+										       :id="'PROP-' + prop.ctx"
+										       v-model="prop.currentValue">
+										<div class="text-gray text-small text-right">
+											{{ prop.minValue }} ~ {{ prop.maxValue }}, {{ prop.stepValue }}
+										</div>
 									</div>
-								</div>
-								<div class="form-group" v-else-if="prop.tt === TreePropColor">
-									<label class="form-label" :for="'PROP-' + prop.ctx">{{ prop.ctx }}</label>
-									<input type="color" class="form-input" :id="'PROP-' + prop.ctx" v-model="prop.currentValue">
-									<div class="text-right mt-1">{{ prop.currentValue }}</div>
-								</div>
-								<!-- 单选 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropSingleSelect">
-									<label class="form-label">{{prop.ctx}}</label>
-									<label class="form-radio form-inline"
-									       v-for="option in prop.options"
-									       @click.prevent="prop.currentValue = option">
-										<input type="radio" :name="'PROP-' + prop.ctx"
-										       :checked="prop.currentValue === option">
-										<i class="form-icon"></i> {{option}}
-									</label>
-								</div>
-								<!-- 多选 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropMultiSelect">
-									<label class="form-label" :for="'PROP-' + prop.ctx">{{prop.ctx}}</label>
-									<label class="form-checkbox  form-inline"
-									       v-for="option in prop.options"
-									       @click.prevent="prop.currentValue.indexOf(option) >= 0 ? prop.currentValue.splice(prop.currentValue.indexOf(option),1) : prop.currentValue.push(option)">
-										<input type="checkbox"
-										       :name="'PROP-' + prop.ctx + '-' + option"
-										       :checked="prop.currentValue.indexOf(option) >= 0">
-										<i class="form-icon"></i> {{ option }}
-									</label>
-								</div>
-								<!-- 注释 -->
-								<div class="form-group" v-else-if="prop.tt === TreePropAnnotation">
-									<div class="">{{prop.defaultValue}}</div>
-								</div>
+									<!-- 布尔型 -->
+									<div class="form-group" v-else-if="prop.type === TreePropBool">
+										<label class="form-switch">
+											<input type="checkbox" v-model="prop.currentValue">
+											<i class="form-icon"></i> {{ $t(prop.ctx) }}
+										</label>
+									</div>
+									<!-- 滑动条 -->
+									<div class="form-group" v-else-if="prop.type === TreePropSlider">
+										<label class="form-label" :for="'PROP-' + prop.ctx">{{ $t(prop.ctx) }}</label>
+										<input type="range" class="slider px-2 tooltip"
+										       :step="prop.stepValue" :min="prop.minValue" :max="prop.maxValue"
+										       :id="'PROP-' + prop.ctx"
+										       v-model.number="prop.currentValue" :data-tooltip="prop.currentValue">
+										<div class="text-gray text-small text-right">
+											{{ prop.minText }} ~ {{ prop.maxText }}
+										</div>
+									</div>
+									<div class="form-group" v-else-if="prop.type === TreePropColor">
+										<label class="form-label" :for="'PROP-' + prop.ctx">{{ $t(prop.ctx) }}</label>
+										<input type="color" class="form-input" :id="'PROP-' + prop.ctx" v-model="prop.currentValue">
+										<div class="text-right mt-1">{{ prop.currentValue }}</div>
+									</div>
+									<!-- 单选 -->
+									<div class="form-group" v-else-if="prop.type === TreePropSingleSelect">
+										<label class="form-label">{{$t(prop.ctx)}}</label>
 
+										<label class="form-radio form-inline"
+										       v-for="option in prop.options"
+										       @click.prevent="prop.currentValue = option.value">
+
+											<input type="radio" :name="'PROP-' + prop.ctx"
+											       :checked="prop.currentValue === option.value">
+											<i class="form-icon"></i> {{ $t(option.ctx) }}
+										</label>
+									</div>
+									<!-- 多选 -->
+									<div class="form-group" v-else-if="prop.type === TreePropMultiSelect">
+										<label class="form-label" :for="'PROP-' + prop.ctx">{{$t(prop.ctx)}}</label>
+										<label class="form-checkbox  form-inline"
+										       v-for="option in prop.options"
+										       @click.prevent="prop.currentValue.indexOf(option.value) >= 0 ? prop.currentValue.splice(prop.currentValue.indexOf(option.value),1) : prop.currentValue.push(option.value)">
+											<input type="checkbox"
+											       :name="'PROP-' + prop.ctx "
+											       :checked="prop.currentValue.indexOf(option.value) >= 0">
+											<i class="form-icon"></i> {{ $t(option.ctx) }}
+										</label>
+									</div>
+									<!-- 注释 -->
+									<div class="form-group" v-else-if="prop.type === TreePropAnnotation">
+										<div class="">{{$t(prop.ctx)}}</div>
+									</div>
+
+								</div>
 							</div>
 						</div>
 					</div>
@@ -215,20 +225,20 @@
 							                  :html="output.html"/>
 						</div>
 						<div v-else-if="currentComponentOutput?.length === 0">
-							无输出项
+							{{ $t('msg-no-out-item') }}
 						</div>
 					</div>
 				</div>
 				<div v-else-if="currentPage.type === 'about-installation'" id="panel-operation-homepage" class="scroll-y">
 <!--					<home-page/>-->
-					主页
+					安装页面
 				</div>
 				<div v-else-if="currentPage.type === 'empty'" style="height: 100%">
 					<div class="empty" style="height: 100%">
 						<div class="empty-icon">
-							<i class="ri-loader-2-line ri-3x"></i>
+							<i class="ri-bubble-chart-line ri-3x"></i>
 						</div>
-						<p class="empty-title h5">no pages</p>
+						<p class="empty-title h5">{{$t('p-others.empty.msg')}}</p>
 					</div>
 				</div>
 			</div>
@@ -243,6 +253,7 @@
 
 import ListComponent from "@/components/ListComponent";
 import {
+	TreeProp,
 	TreePropString,
 	TreePropNumber,
 	TreePropSlider,
@@ -260,6 +271,11 @@ const EMPTY_PAGE = { type: 'empty' };
 const INSTALLATION_PAGE = { type: 'about-installation' };
 
 export default {
+
+	mounted() {
+		this.clickNode(MetaPages[1].children[2]);
+	},
+
 	name: 'App',
 	components: {
 		ComponentOutput,
@@ -267,6 +283,7 @@ export default {
 	},
 	data() {
 		return {
+			TreeProp,
 			TreePropString,
 			TreePropNumber,
 			TreePropSlider,
@@ -301,14 +318,7 @@ export default {
 			{
 				switch(prop.tt)
 				{
-					case TreePropString:
-					case TreePropNumber:
-					case TreePropSlider:
-					case TreePropColor:
-					case TreePropBool:
-					case TreeGroup:
-					case TreePropMultiSelect:
-					case TreePropSingleSelect:
+					case TreeProp:
 						values.push(prop.currentValue);
 				}
 			}
@@ -344,15 +354,15 @@ export default {
 			// console.log('node',node);
 			const objPage = {
 				tt: node.tt,
-				type: 'component',
-				key: node.key,
+				type: node.type,
+				ctx: node.ctx,
 				props: [],
 				generators: node.generators,
 				listUrl: node.listUrl,
 				listUnimplemented: node.listUnimplemented,
 			};
 
-			for(let metaProp of node.props)
+			for(let metaProp of (node.props ?? []))
 			{
 				const objValue = Object.assign({}, metaProp, { currentValue: metaProp.defaultValue });
 				objPage.props.push(objValue);
@@ -363,8 +373,5 @@ export default {
 		},
 
 	},
-	mounted() {
-		// this.clickNode(MetaPages[0].children[4]);
-	}
 }
 </script>

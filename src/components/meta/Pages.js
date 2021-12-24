@@ -1,7 +1,7 @@
 import {
     TreeGroup,
-    TreeItemPage,
-    TreeItemPageSingle,
+    TreePage,
+    TreeProp,
     TreePropBool,
     TreePropMultiSelect,
     TreePropNumber,
@@ -10,8 +10,8 @@ import {
     TreePropString,
 } from './Consts';
 import {
-    NodeGroup,
-    NodePage,
+    Group,
+    PageComponent, PageSingle,
     PropAnnotation,
     PropBool,
     PropColor,
@@ -25,55 +25,59 @@ import {PLACEHOLDER_GIF} from './Placeholders';
 
 function setContext(node, contextParent)
 {
-    const contextCurrent = (contextParent == null ? '' : contextParent + '-') + node.key;
-    node.ctx = contextCurrent;
+    // node.key 翻译键 整理完成之后会删掉这个
+    // node.ctx 真正使用的翻译键
+    // node.tt 节点类型
+    // node.type 详细类型
+    const contextCurrent = (contextParent == null ? '' : contextParent + '.') + node.key;
+    delete node.key;
+    node.ctx = contextCurrent + '.#title';
     switch(node.tt)
     {
         case TreeGroup:
         {
-            for(let child of node.children)
+            for(let child of (node.children ?? []))
             {
                 setContext(child, contextCurrent);
             }
             break;
         }
-        case TreeItemPage:
+        case TreePage:
         {
-            for(let prop of node.props)
+            for(let prop of (node.props ?? []))
             {
                 setContext(prop, contextCurrent);
             }
             break;
         }
-        case TreeItemPageSingle:
+        case TreeProp:
         {
-            // 暂时不处理
-            break;
-        }
-        case TreePropString:
-        case TreePropNumber:
-        case TreePropBool:
-        case TreePropSlider:
-        case TreePropSingleSelect:
-        case TreePropMultiSelect:
-        {
-            // 没什么需要处理的
+            if(node.type === TreePropSingleSelect || node.type === TreePropMultiSelect)
+            {
+                const options = node.options ??= [];
+                const optionsNew = [];
+                for(const option of options)
+                {
+                    optionsNew.push({
+                        ctx: contextCurrent + '.' + option,
+                        value: option,
+                    });
+                }
+                node.options = optionsNew;
+            }
             break;
         }
     }
 }
 
 // elements
-const PAGE_TYPOGRAPHY = NodePage('typography', [
+const PAGE_TYPOGRAPHY = PageComponent('typography', [
     PropString('text','demo text'),
     PropSingleSelect('dom', 'none',[
         'div', 'span', 'h6', 'h5', 'h4', 'h3', 'h2', 'h1',
         'label', 'abbr', 'strong', 'b', 'cite', 'code', 'del', 'em',
         'i', 'ins', 'kbd', 'mark', 'ruby', 's', 'samp', 'sub',
         'sup', 'time', 'u', 'var', 'blockquote',
-    ]),
-    PropSingleSelect('language','none',[
-        'none', 'zh-hans', 'zh-hant', 'ja', 'ko',
     ]),
     PropSingleSelect('foreground-color','default',[
         'default', 'primary', 'secondary', 'dark', 'gray', 'light', 'success', 'warning', 'error',
@@ -91,10 +95,13 @@ const PAGE_TYPOGRAPHY = NodePage('typography', [
         'text-small', 'text-large', 'text-tiny',
         'text-ellipsis', 'text-clip', 'text-break',
     ]),
+    PropSingleSelect('language','none',[
+        'none', 'zh-hans', 'zh-hant', 'ja', 'ko',
+    ]),
 ],[
     {
         ctx: 'gen-typography', inline: false,
-        func: ([text,dom,language,fgc,bgc,cursors,extraStyle])=>{
+        func: ([text,dom,fgc,bgc,cursors,extraStyle,language])=>{
             let strClass = ' class="';
             switch (language)
             {
@@ -146,8 +153,8 @@ const PAGE_TYPOGRAPHY = NodePage('typography', [
 ],[
     { key: 'document', url: 'https://picturepan2.github.io/spectre/elements/typography.html' },
 ],[]);
-const PAGE_FORM_INPUT = NodePage('form-input',[],[]);
-const PAGE_FORM_TEXTAREA = NodePage('form-textarea',[
+const PAGE_FORM_INPUT = PageComponent('form-input',[],[]);
+const PAGE_FORM_TEXTAREA = PageComponent('form-textarea',[
     PropString('label-text','label text'),
     PropString('placeholder','placeholder'),
     PropSlider('rows',3,2,10,1,'2','10'),
@@ -172,7 +179,7 @@ function SELECT_BODY(count)
 
     return body;
 }
-const PAGE_FORM_SELECT = NodePage('form-select',[
+const PAGE_FORM_SELECT = PageComponent('form-select',[
     PropSlider('count-option',3,2,6,1,'2','6'),
 ],[
     {
@@ -198,7 +205,7 @@ const PAGE_FORM_SELECT = NodePage('form-select',[
         },
     },
 ]);
-const PAGE_FORM_RADIO = NodePage('form-radio',[
+const PAGE_FORM_RADIO = PageComponent('form-radio',[
     PropSlider('count-item',2,2,5,1,'2','5'),
     PropBool('inline',false),
 ],[
@@ -221,7 +228,7 @@ const PAGE_FORM_RADIO = NodePage('form-radio',[
         },
     }
 ]);
-const PAGE_SWITCH = NodePage('form-switch',[
+const PAGE_SWITCH = PageComponent('form-switch',[
     PropString('text','label text'),
     PropBool('inline',false),
 ],[
@@ -237,7 +244,7 @@ const PAGE_SWITCH = NodePage('form-switch',[
         },
     }
 ]);
-const PAGE_CHECKBOX = NodePage('form-checkbox',[
+const PAGE_CHECKBOX = PageComponent('form-checkbox',[
     PropString('label-text','label text'),
     PropSingleSelect('state','unchecked',['unchecked','checked','indeterminate']),
     PropBool('inline',false),
@@ -257,7 +264,7 @@ const PAGE_CHECKBOX = NodePage('form-checkbox',[
         },
     }
 ]);
-const PAGE_CODE = NodePage('code',[
+const PAGE_CODE = PageComponent('code',[
     PropString('lang','HTML'),
     PropString('content','container text'),
 ],[
@@ -268,7 +275,7 @@ const PAGE_CODE = NodePage('code',[
         },
     }
 ]);
-const PAGE_MEDIA_IMAGE = NodePage('media-image',[
+const PAGE_MEDIA_IMAGE = PageComponent('media-image',[
     PropSingleSelect('style','responsive',['responsive','fit-contain','fit-cover']),
     PropSingleSelect('figure-caption','none',['none','text']),
 ],[
@@ -288,7 +295,7 @@ ${domImage}
         },
     }
 ]);
-const PAGE_MEDIA_VIDEO = NodePage('media-video',[
+const PAGE_MEDIA_VIDEO = PageComponent('media-video',[
     PropSingleSelect('style','responsive',['responsive','4-3','1-1']),
     PropSingleSelect('type','video',['video','iframe']),
 ],[
@@ -313,7 +320,7 @@ const PAGE_MEDIA_VIDEO = NodePage('media-video',[
     }
 ]);
 
-const PAGE_TABLES = NodePage('tables', [
+const PAGE_TABLES = PageComponent('tables', [
     PropBool('striped', true),
     PropBool('hover', true),
     PropBool('scroll', false),
@@ -350,7 +357,7 @@ function BTN_CSS(css, active = false, loading = false, disabled = false, size = 
     else if(size === 'small') css += ' btn-sm';
     return css;
 }
-const PAGE_BUTTONS = NodePage('buttons',[
+const PAGE_BUTTONS = PageComponent('buttons',[
     PropString('text', 'button'),
     PropBool('active', false),
     PropBool('loading', false),
@@ -421,7 +428,7 @@ const PAGE_BUTTONS = NodePage('buttons',[
 ]);
 
 // layouts, but show in components
-const PAGE_HERO = NodePage('hero',[
+const PAGE_HERO = PageComponent('hero',[
     PropString('title','hero title'),
     PropString('subtitle', 'hero subtitle'),
     PropSingleSelect('bgc', 'gray', [
@@ -443,7 +450,7 @@ const PAGE_HERO = NodePage('hero',[
         },
     }
 ]);
-const PAGE_NAVBAR = NodePage('navbar',[
+const PAGE_NAVBAR = PageComponent('navbar',[
     PropSingleSelect('left-style','default',['default','brand','none']),
     PropSingleSelect('center-style','none',['icon','none']),
     PropSingleSelect('right-style','default',['default','brand','none']),
@@ -506,8 +513,45 @@ const PAGE_NAVBAR = NodePage('navbar',[
         },
     }
 ]);
+const PAGE_ACCORDIONS = PageComponent('accordions',[
+    PropSlider('count-group',3,1,5,1,'1','5'),
+    PropBool('has-icon',true),
+    PropSingleSelect('type','input-radio',['input-radio','details-summary']),
+],[
+    {
+        ctx: 'gen-accordions', inline: false,
+        func: ([countGroup,hasIcon,type])=>{
+            let ret = '';
+
+            for(let step = 0; step < countGroup; step++)
+            {
+                if(type === 'input-radio') ret += `<div class="accordion">
+  <input type="checkbox" id="accordion-none-icon-${step + 1}" name="accordion-checkbox" hidden>
+  <label class="accordion-header c-hand" for="accordion-none-icon-${step + 1}">
+    ${hasIcon ? '<i class="icon icon-arrow-right mr-1"></i>' : ''}
+        accordion title ${step + 1}
+  </label>
+  <div class="accordion-body">
+    accordion body ${step + 1}
+  </div>`;
+                else
+                    ret += `<details class="accordion">
+  <summary class="accordion-header c-hand">
+    ${hasIcon ? '<i class="icon icon-arrow-right mr-1"></i>' : ''}
+    accordion title ${step + 1}
+  </summary>
+  <div class="accordion-body">
+    accordion body ${step + 1}
+  </div>
+</details>`;
+            }
+
+            return ret;
+        },
+    },
+]);
 // components
-const PAGE_AVATARS = NodePage('avatars',[
+const PAGE_AVATARS = PageComponent('avatars',[
     PropString('avatar-url',''),
     PropString('avatar-text','Fi'),
     PropSingleSelect('size','default',['xl','lg','default','sm','xs']),
@@ -548,7 +592,7 @@ ${domPresence}
 ],[
     { key: 'avatar-icons' }
 ]);
-const PAGE_BADGES = NodePage('badges',[
+const PAGE_BADGES = PageComponent('badges',[
     PropString('text','inner text'),
     PropString('data-badge','1'),
     PropString('data-avatar-url',''),
@@ -576,11 +620,11 @@ ${avatarText !== '' ? 'data-initial="'+avatarText+'"' : ''}
         },
     },
 ]);
-const PAGE_BARS = NodePage('bars',[
+const PAGE_BARS = PageComponent('bars',[
     PropSingleSelect('size','default',['default','sm']),
     PropSlider('percentage',50,0,100,1,'0','100%'),
     PropColor('color','#818bd5'),
-    PropBool('has-Text',true),
+    PropBool('has-text',true),
     PropBool('has-tooltip',true),
 ],[
     {
@@ -600,7 +644,7 @@ const PAGE_BARS = NodePage('bars',[
     { key: 'document', url: 'https://picturepan2.github.io/spectre/components/bars.html' },
 ],);
 // const PAGE_BARS_SILDER = NodePage();
-const PAGE_BREADCRUMBS = NodePage('breadcrumbs',[
+const PAGE_BREADCRUMBS = PageComponent('breadcrumbs',[
     PropSlider('count-step',3,2,5,1,'2','5'),
     PropBool('has-tooltip',false),
 ],[
@@ -619,7 +663,7 @@ const PAGE_BREADCRUMBS = NodePage('breadcrumbs',[
         },
     }
 ]);
-const PAGE_CHIPS = NodePage('chips',[
+const PAGE_CHIPS = PageComponent('chips',[
     PropString('text','chip text'),
     PropBool('has-avatar',true),
     PropString('avatar-url',''),
@@ -634,7 +678,7 @@ ${hasAvatar ? '<img src="'+avatarUrl+'" class="avatar avatar-sm" alt=""/>\n' : '
         },
     }
 ]);
-const PAGE_EMPTY_STATES = NodePage('empty-states',[
+const PAGE_EMPTY_STATES = PageComponent('empty-states',[
     PropString('icon-class','icon icon-3x icon-people'),
     PropString('title','title text'),
     PropString('subtitle','subtitle text'),
@@ -690,7 +734,7 @@ function POPOVER_CONTENT(type,head,body,footer)
   </div>
 </div>`;
 }
-const PAGE_POPOVERS = NodePage('popovers',[
+const PAGE_POPOVERS = PageComponent('popovers',[
     PropSingleSelect('content-type','card',['card','text']),
     PropBool('card-head',true),
     PropBool('card-body',true),
@@ -721,7 +765,7 @@ const PAGE_POPOVERS = NodePage('popovers',[
         },
     },
 ]);
-const PAGE_STEPS = NodePage('steps',[
+const PAGE_STEPS = PageComponent('steps',[
     PropSlider('count-step',3,2,5,1,'2','5'),
     PropSlider('active-step',3,2,5,1,'2','5'),
     PropBool('has-tooltip',true),
@@ -740,7 +784,7 @@ const PAGE_STEPS = NodePage('steps',[
         },
     }
 ]);
-const PAGE_TABS = NodePage('tabs',[
+const PAGE_TABS = PageComponent('tabs',[
     PropSlider('count-tab',3,2, 5,1,'2','5'),
     PropSlider('active-tab',3,1, 5,1,'1','5'),
     PropBool('block',false),
@@ -773,7 +817,7 @@ const PAGE_TABS = NodePage('tabs',[
         },
     },
 ]);
-const PAGE_TOASTS = NodePage('toasts',[
+const PAGE_TOASTS = PageComponent('toasts',[
     PropString('text','toast text'),
     PropBool('has-clear',true),
 ],[
@@ -816,7 +860,7 @@ ${text}
 ],[
     { key: 'document', url: 'https://picturepan2.github.io/spectre/components/toasts.html' },
 ]);
-const PAGE_TOOLTIPS = NodePage('tooltips',[
+const PAGE_TOOLTIPS = PageComponent('tooltips',[
     PropSingleSelect('dom','button',['button','span']),
     PropSingleSelect('position','top',['top','right','bottom','left']),
     PropString('text-dom','dom text'),
@@ -839,7 +883,7 @@ const PAGE_TOOLTIPS = NodePage('tooltips',[
 ]);
 
 // experimentals
-const PAGE_PARALLAX = NodePage('parallax',[
+const PAGE_PARALLAX = PageComponent('parallax',[
     PropString('text','parallax text'),
     PropSingleSelect('dom','h2',['h1','h2','h3','h4','h5','h6','div']),
     PropString('img-url','https://via.placeholder.com/250.gif/2db38a/4a22c0?text=placeholder+picture'),
@@ -864,7 +908,7 @@ const PAGE_PARALLAX = NodePage('parallax',[
         },
     }
 ]);
-const PAGE_PROGRESS = NodePage('progress',[
+const PAGE_PROGRESS = PageComponent('progress',[
     PropNumber('max',100,'','',1),
     PropBool('loading',false),
     PropNumber('value',50,'','',1),
@@ -876,7 +920,7 @@ const PAGE_PROGRESS = NodePage('progress',[
         },
     },
 ]);
-const PAGE_SLIDER = NodePage('sliders',[
+const PAGE_SLIDER = PageComponent('sliders',[
     PropNumber('min',0,'',''),
     PropNumber('max',100,'',''),
     PropNumber('value',50,'',''),
@@ -893,7 +937,7 @@ const PAGE_SLIDER = NodePage('sliders',[
 
 const MetaPages = [
     // NodeItemPageSingle('home', 'ri-home-line'),
-    NodeGroup('p-elements',[
+    Group('p-elements',[
         PAGE_TYPOGRAPHY,
         PAGE_TABLES,
         PAGE_BUTTONS,
@@ -904,7 +948,7 @@ const MetaPages = [
         PAGE_SWITCH,
         PAGE_CHECKBOX,
 
-        NodePage('icons',[
+        PageComponent('icons',[
             PropSingleSelect('dom-type','span',['span','i','div']),
             PropSingleSelect('size','multiply',['multiply','px']),
             PropSlider('size-multiply',1,1,4,'1x','4x'),
@@ -915,9 +959,10 @@ const MetaPages = [
         PAGE_MEDIA_IMAGE,
         PAGE_MEDIA_VIDEO,
     ]),
-    NodeGroup('p-components',[
+    Group('p-components',[
         PAGE_HERO,
         PAGE_NAVBAR,
+        PAGE_ACCORDIONS,
         PAGE_AVATARS,
         PAGE_BADGES,
         PAGE_BARS,
@@ -930,21 +975,21 @@ const MetaPages = [
         PAGE_TOASTS,
         PAGE_TOOLTIPS,
     ]),
-    NodeGroup('p-utilities'),
-    NodeGroup('p-experimentals',[
+    Group('p-utilities'),
+    Group('p-experimentals',[
         PAGE_PARALLAX,
         PAGE_PROGRESS,
         PAGE_SLIDER,
     ]),
-    NodeGroup('p-others',[
-        // {
-        //     key: 'about-installation',
-        // }
+    Group('p-others',[
+        PageSingle('about-installation','about-installation'),
+        PageSingle('about-spectre-css-helper','about-spectre-css-helper'),
     ]),
 ];
 for(let meta of MetaPages)
 {
     setContext(meta,null);
 }
+
 
 export default MetaPages;

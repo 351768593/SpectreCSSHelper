@@ -26,24 +26,21 @@
 			<div @click="isShowChildren = ! isShowChildren" class="list-group">
 				<span class="ri-arrow-down-s-line" v-if="isShowChildren"></span>
 				<span class="ri-arrow-right-s-line" v-else></span>
-				{{ node.key }}
+				{{ $t(node.ctx) }}
 			</div>
 			<div v-if="isShowChildren" style="padding-left: 28px">
 				<list-component-node :node="child" v-for="child in node.children" @click-node="clickNode($event)"/>
 			</div>
 		</div>
 
-		<div v-else-if="tt === TreeItemPage" class="list-item" @click="clickNode(node)">
-			{{ node.key }}
-		</div>
-		<div v-else-if="tt === TreeItemPageSingle" class="list-group">
-			<span :class="node.icon"></span> {{ node.key }}
+		<div v-else-if="tt === TreePage" class="list-item" @click="clickNode(node)">
+			{{ $t(node.ctx) }}
 		</div>
 	</div>
 </template>
 
 <script>
-import { TreeGroup, TreeItemPage, TreeItemPageSingle } from './meta/Consts';
+import { TreeGroup, TreePage } from './meta/Consts';
 
 export default {
 	name: "ListComponentNode",
@@ -53,7 +50,7 @@ export default {
 	},
 	data() {
 		return {
-			TreeGroup, TreeItemPage, TreeItemPageSingle,
+			TreeGroup, TreePage,
 			isShowChildren: true,
 		};
 	},

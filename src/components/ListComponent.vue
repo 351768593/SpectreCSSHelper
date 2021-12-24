@@ -1,9 +1,4 @@
 <style scoped>
-.nav
-{
-	padding: 4px 6px;
-}
-
 </style>
 
 <template>
@@ -17,7 +12,7 @@
 import {
 	TreeGroup,
 	TreeItemPageSingle,
-	TreeItemPage,
+	TreePage,
 	TreePropString,
 	TreePropNumber,
 	TreePropSlider,
@@ -44,7 +39,7 @@ export default {
 			Pages: {
 				TreeGroup,
 				TreeItemPageSingle,
-				TreeItemPage,
+				TreeItemPage: TreePage,
 				TreePropString,
 				TreePropNumber,
 				TreePropSlider,

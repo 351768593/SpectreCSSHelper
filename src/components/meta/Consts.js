@@ -1,7 +1,10 @@
 
+// 树形结构 node.tt 使用的
 export const TreeGroup = Symbol('group');
-export const TreeItemPageSingle = Symbol('item-page-single');
-export const TreeItemPage = Symbol('item-page');
+export const TreePage = Symbol('item-page');
+export const TreeProp = Symbol('props');
+
+// node.type 使用的
 export const TreePropString = Symbol('prop-string');
 export const TreePropNumber = Symbol('prop-number');
 export const TreePropSlider = Symbol('prop-slider');

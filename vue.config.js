@@ -5,4 +5,16 @@ module.exports = {
         port: 8080,
         public: 'http://localhost:8080'
     },
+
+    pluginOptions: {
+      i18n: {
+        locale: 'zhCN',
+        fallbackLocale: 'en',
+        localeDir: 'locales',
+        enableLegacy: false,
+        runtimeOnly: false,
+        compositionOnly: false,
+        fullInstall: true
+      }
+    }
 }

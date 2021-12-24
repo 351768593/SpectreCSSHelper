@@ -22,7 +22,7 @@ generators
 - [x] tables 
 - [x] buttons
 - [ ] form-input
-- [ ] form-textarea
+- [x] form-textarea
 - [x] form-select
 - [x form-radio
 - [x] form-switch
@@ -35,7 +35,7 @@ generators
 - [x] hero
 - [x] navbar
 > for components
-- [ ] accordions
+- [x] accordions
 - [x] avatars
 - [x] badges
 - [x] bars

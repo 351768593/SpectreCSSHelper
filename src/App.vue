@@ -3,11 +3,16 @@
 @import '~spectre.css/dist/spectre.min.css';
 @import '~spectre.css/dist/spectre-exp.min.css';
 @import '~spectre.css/dist/spectre-icons.min.css';
+@import '~highlight.js/styles/xcode.css';
 
 .scroll-y
 {
 	height: 100%;
 	overflow-y: auto;
+}
+.hljs
+{
+	font-family: "JetBrains Mono";
 }
 
 </style>
@@ -67,6 +72,7 @@
 #panel-content-base
 {
 	flex-grow: 0;
+	flex-shrink: 0;
 	width: 300px;
 }
 #panel-output-base
@@ -86,9 +92,10 @@
 
 		<div id="panel-operation-base">
 			<div>
-				<ul class="tab">
+				<ul class="tab"
+				    style="user-select: none">
 					<li class="tab-item active" v-if="currentPage.type === 'empty'">
-						<a>
+						<a class="px-2">
 							<span class="text-gray">
 								{{ $t('p-others.empty.#title') }}
 							</span>
@@ -98,11 +105,12 @@
 					<li class="tab-item pl-1"
 					    :class="currentPage === page ? ' active' : ''"
 					    v-for="(page,indexPage) in listPages">
-						<a href="#">
-							<span @click="currentPage = page">
+						<a>
+							<span @click="currentPage = page" @click.middle.prevent="page.pinned = !page.pinned">
 								{{ $t(page.ctx) }}
 							</span>
-							<button class="btn btn-clear" @click="closePage(indexPage)"></button>
+							<button v-if="!page.pinned" class="btn btn-clear" @click="closePage(indexPage)"></button>
+							<span v-else class="ri-pushpin-fill d-inline-block" style="margin-left: 8px; line-height: 12px; width: 14px;"></span>
 						</a>
 					</li>
 
@@ -273,7 +281,7 @@ const INSTALLATION_PAGE = { type: 'about-installation' };
 export default {
 
 	mounted() {
-		this.clickNode(MetaPages[1].children[2]);
+		this.clickNode(MetaPages[3].children[1]);
 	},
 
 	name: 'App',
@@ -346,8 +354,13 @@ export default {
 		},
 		closeAllPages()
 		{
-			this.listPages.splice(0,this.listPages.length);
-			this.currentPage = this.EMPTY_PAGE;
+			let isCurrentPagePinned = this.currentPage.pinned;
+			this.listPages = this.listPages.filter(page => page.pinned);
+			if(!isCurrentPagePinned) // 当前页面被关闭了
+			{
+				const len = this.listPages.length;
+				this.currentPage = len ? this.listPages[len - 1] : EMPTY_PAGE;
+			}
 		},
 		clickNode(node) // 左侧树单击某个节点 准备创建一个新的页面
 		{
@@ -364,7 +377,7 @@ export default {
 
 			for(let metaProp of (node.props ?? []))
 			{
-				const objValue = Object.assign({}, metaProp, { currentValue: metaProp.defaultValue });
+				const objValue = Object.assign({}, metaProp, { currentValue: metaProp.defaultValue, pinned: false });
 				objPage.props.push(objValue);
 			}
 

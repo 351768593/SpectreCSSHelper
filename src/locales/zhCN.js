@@ -332,6 +332,14 @@ export default {
       'count-step': { '#title': '步数' },
       'has-tooltip': { '#title': '包含提示信息' },
     },
+    'chips': {
+      '#title': '标签',
+
+      'text': { '#title': '文本' },
+      'has-avatar': { '#title': '包含头像' },
+      'avatar-url': { '#title': '头像图片 URL' },
+      'has-close': { '#title': '包含关闭按钮' },
+    },
     'empty-states': {
       '#title': '空状态',
 
@@ -340,13 +348,8 @@ export default {
       'subtitle': { '#title': '副标题' },
       'has-action': { '#title': '包含操作栏' },
     },
-    'chips': {
-      '#title': '标签',
-
-      'text': { '#title': '文本' },
-      'has-avatar': { '#title': '包含头像' },
-      'avatar-url': { '#title': '头像图片 URL' },
-      'has-close': { '#title': '包含关闭按钮' },
+    'menu': {
+      '#title': '菜单',
     },
     'popovers': {
       '#title': '浮动框',
@@ -409,6 +412,13 @@ export default {
 
   'p-experimentals': {
     '#title': '实验性',
+    'comparison-sliders': {
+      '#title': '比较滑动条',
+    },
+    'filters': {
+      '#title': '过滤器',
+      'count-group': { '#title': '组数' },
+    },
     'parallax': {
       '#title': '视差',
 
@@ -444,6 +454,11 @@ export default {
       'about-tooltip': {
         '#title': '您需要使用b脚本手动为"data-tooltip"或"value"属性赋值',
       },
+    },
+    'timelines': {
+      '#title': '时间线',
+      'count-step': { '#title': '步数' },
+
     },
   },
 

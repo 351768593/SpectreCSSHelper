@@ -697,6 +697,101 @@ const PAGE_EMPTY_STATES = PageComponent('empty-states',[
         },
     }
 ]);
+const TEMPLATE_MENU_BODY = `<ul class="menu">
+
+  <li class="menu-item">
+    <div class="tile tile-centered">
+      <div class="tile-icon"><img class="avatar" src="../img/avatar-4.png" alt="Avatar"></div>
+      <div class="tile-content">Steve Rogers</div>
+    </div>
+  </li>
+                  
+  <li class="divider" data-content="LINKS">
+  </li>
+  <li class="menu-item">
+    <a href="#">
+      <i class="icon icon-link"></i> Slack
+    </a>
+  </li>
+  <li class="menu-item">
+    <label class="form-checkbox">
+      <input type="checkbox">
+      <i class="form-icon"></i> form-checkbox
+    </label>
+  </li>
+  <li class="divider"></li>
+  <li class="menu-item">
+    <a href="#">
+      <i class="icon icon-link"></i> Settings
+    </a>
+    <div class="menu-badge">
+      <label class="label label-primary">2</label>
+    </div>
+  </li>
+
+  <li class="menu-item">
+    <a href="#">My profile</a>
+    <div class="menu-badge">
+      <label class="form-checkbox">
+        <input type="checkbox">
+        <i class="form-icon"></i> Public
+      </label>
+    </div>
+  </li>
+  
+  <li class="menu-item">
+    <label class="form-checkbox">
+      <input type="checkbox" checked=""><i class="form-icon"></i> form-checkbox
+    </label>
+  </li>
+  <li class="menu-item">
+    <label class="form-radio">
+      <input type="radio" checked=""><i class="form-icon"></i> form-radio
+    </label>
+  </li>
+  <li class="menu-item">
+    <label class="form-switch">
+      <input type="checkbox" checked=""><i class="form-icon"></i> form-switch
+    </label>
+  </li>
+</ul>`;
+const PAGE_MENU = PageComponent('menu',[
+],[
+    {
+        ctx: 'gen-menu-direct', inline: false,
+        func: ([])=>{
+            return TEMPLATE_MENU_BODY;
+        },
+    },
+    {
+        ctx: 'gen-menu-dropdown-split', inline: false,
+        func: ([])=>{
+            return `<div class="dropdown">
+  <a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+    dropdown menu <i class="icon icon-caret"></i>
+  </a>
+  ${TEMPLATE_MENU_BODY}
+</div>`;
+        },
+    },
+    {
+        ctx: 'gen-menu-dropdown-combine', inline: false,
+        func: ([])=>{
+            return `<div class="dropdown">
+  <div class="btn-group">
+    <a href="#" class="btn">
+      dropdown button
+    </a>
+    <a href="#" class="btn dropdown-toggle" tabindex="0">
+      <i class="icon icon-caret"></i>
+    </a>
+
+    ${TEMPLATE_MENU_BODY}
+  </div>
+</div>`;
+        },
+    },
+]);
 function POPOVER_CONTENT(type,head,body,footer)
 {
     let content;
@@ -883,6 +978,65 @@ const PAGE_TOOLTIPS = PageComponent('tooltips',[
 ]);
 
 // experimentals
+const PAGE_COMPARISON_SLIDERS = PageComponent('comparison-sliders',[],[
+    {
+        ctx: 'gen-sliders', inline: false,
+        func: ([])=>{
+            return `<div class="comparison-slider" style="width: 800px">
+  <figure class="comparison-before">
+    <img src="placeholder-image.gif" alt="placeholder"/>
+    <div class="comparison-label">Placeholder1</div>
+  </figure>
+
+  <figure class="comparison-after">
+    <img src="placeholder-image-2.gif" alt="placeholder" style="width: 800px"/>
+    <div class="comparison-label">Placeholder2</div>
+    <textarea class="comparison-resizer" readonly style="margin-left: 0; margin-right: 0"></textarea>
+  </figure>
+</div>`;
+        },
+    },
+]);
+const PAGE_FILTERS = PageComponent('filters',[
+    PropSlider('count-group',3,2,8,1,'2','8'),
+],[
+    {
+        ctx: 'gen-filters', inline: false,
+        func: ([countGroup])=>{
+            let listRadio = `<input type="radio" id="tag-0" class="filter-tag" name="filter-radio" hidden checked>`;
+            let listNav = ``;
+            let listItem = ``;
+
+            for(let step = 0; step < countGroup; step++)
+            {
+                listRadio += `<input type="radio" id="tag-${step + 1}" class="filter-tag" name="filter-radio" hidden>`;
+                listNav += `<label class="chip" for="tag-${step + 1}">Filter Group ${step + 1}</label>`;
+                listItem += `<div class="filter-item card" data-tag="tag-${step + 1}">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title text-bold">Filter Group ${step + 1}</div>
+      <div class="card-subtitle text-gray">Filter Group ${step + 1} Content</div>
+    </div>
+  </div>
+    </div>`;
+            }
+
+            return `<div class="filter">
+  <input type="radio" id="tag-0" class="filter-tag" name="filter-radio" hidden checked>
+  ${listRadio}
+
+  <div class="filter-nav">
+    <label class="chip" for="tag-0">All</label>
+    ${listNav}
+  </div>
+
+  <div class="filter-body">
+    ${listItem}
+  </div>
+</div>`;
+        },
+    }
+]);
 const PAGE_PARALLAX = PageComponent('parallax',[
     PropString('text','parallax text'),
     PropSingleSelect('dom','h2',['h1','h2','h3','h4','h5','h6','div']),
@@ -934,6 +1088,32 @@ const PAGE_SLIDER = PageComponent('sliders',[
         },
     }
 ]);
+const PAGE_TIMELINES = PageComponent('timelines',[
+    PropSlider('count-step',3,2,5,1,'2','5'),
+],[
+    {
+        ctx: 'gen-timelines', inline: false,
+        func: ([countStep])=>{
+            let body = '';
+            for(let step = 0; step < countStep; step++)
+            {
+                body += `<div class="timeline-item" id="timeline-demo-${step + 1}">
+    <div class="timeline-left">
+      <a class="timeline-icon${step % 2 === 0 ? ' icon-lg':''}" href="#timeline-demo-${step + 1}">
+        ${step % 2 === 0 ? `<i class="icon icon-check"></i>` : ``}
+      </a>
+    </div>
+    <div class="timeline-content">
+      timeline content ${step + 1}
+    </div>
+  </div>`;
+            }
+            return `<div class="timeline">
+${body}
+</div>`;
+        },
+    },
+]);
 
 const MetaPages = [
     // NodeItemPageSingle('home', 'ri-home-line'),
@@ -968,6 +1148,7 @@ const MetaPages = [
         PAGE_BARS,
         PAGE_BREADCRUMBS,
         PAGE_EMPTY_STATES,
+        PAGE_MENU,
         PAGE_CHIPS,
         PAGE_POPOVERS,
         PAGE_STEPS,
@@ -977,9 +1158,12 @@ const MetaPages = [
     ]),
     Group('p-utilities'),
     Group('p-experimentals',[
+        PAGE_COMPARISON_SLIDERS,
+        PAGE_FILTERS,
         PAGE_PARALLAX,
         PAGE_PROGRESS,
         PAGE_SLIDER,
+        PAGE_TIMELINES,
     ]),
     Group('p-others',[
         PageSingle('about-installation','about-installation'),

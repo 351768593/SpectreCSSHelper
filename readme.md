@@ -63,18 +63,18 @@ generators
 - [x] bars
 - [ ] bars-slider
 - [x] breadcrumbs
-- [ ] cards
+- [x] cards
 - [x] chips
 - [x] empty states
 - [x] menu
 - [ ] <del>modals</del>
 - [ ] nav
 - [ ] pagination
-- [ ] panels
+- [x] panels
 - [x] popovers
 - [x] steps
 - [x] tabs
-- [ ] tiles
+- [x] tiles
 - [x] toasts
 - [x] tooltips
 > for utilities

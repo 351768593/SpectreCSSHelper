@@ -40,13 +40,6 @@
 	justify-content: space-between;
 	align-items: stretch;
 }
-/*#panel-operation-header*/
-/*{*/
-/*	flex-grow: 0;*/
-/*	flex-shrink: 1;*/
-
-/*	width: 100%;*/
-/*}*/
 #panel-operation-body
 {
 	flex-grow: 1;
@@ -78,6 +71,71 @@
 #panel-output-base
 {
 	flex-grow: 1;
+}
+
+#ee {
+	position: fixed;
+	bottom: 0;
+	right: 40px;
+	width: 64px;
+	height: 64px;
+}
+@keyframes ees-appear {
+	0% { opacity: 0; top: -1500px; }
+	25% { opacity: 50%; top: -1500px; }
+	50% { opacity: 100%; top: -1500px; }
+	75% { opacity: 100%; top: 0; }
+
+	80% { opacity: 100%; top: 0; transform: rotate(135deg) }
+	85% { opacity: 100%; top: 0; transform: rotate(132deg) }
+	90% { opacity: 100%; top: 0; transform: rotate(138deg) }
+	95% { opacity: 100%; top: 0; transform: rotate(132deg) }
+	100% { opacity: 100%; top: 0;	transform: rotate(138deg) }
+}
+#ees {
+	position: absolute;
+	transform: rotate(135deg);
+	image-rendering: pixelated;
+	height: 64px;
+
+	animation: ees-appear 1.5s;
+	animation-timing-function: linear;
+
+	z-index: 0;
+}
+@keyframes eef-appear {
+	from { opacity: 0; }
+	to { opacity: 85%; }
+}
+#eef {
+	position: absolute;
+	bottom: 0;
+	left: 25%;
+
+	height: 32px;
+	opacity: 0;
+
+	animation: eef-appear 0.5s;
+	animation-delay: 1.15s;
+	animation-fill-mode: forwards;
+
+	z-index: 1;
+}
+#eett
+{
+	position: absolute;
+	top: -80px;
+	display: none;
+
+	width: 200px;
+	height: 60px;
+	border: 1px solid green;
+	background-color: #1e0f1e;
+	opacity: 90%;
+}
+#ee #ees:hover+#eett
+{
+	display: block;
 }
 
 </style>
@@ -253,7 +311,18 @@
 
 		</div>
 
-
+		<div id="ee">
+			<img id="eef" src="fire.gif" alt="fire"/>
+			<img id="ees" src="diamond-sword.png" alt="diamond-sword"/>
+			<div id="eett">
+				<div id="eettt">
+					村人之剑
+				</div>
+				<div id="eettst">
+					the Sword
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -281,7 +350,7 @@ const INSTALLATION_PAGE = { type: 'about-installation' };
 export default {
 
 	mounted() {
-		this.clickNode(MetaPages[3].children[1]);
+		this.clickNode(MetaPages[1].children[15]);
 	},
 
 	name: 'App',
@@ -314,6 +383,9 @@ export default {
 			// 是否展示左侧组件目录
 			isShowLeftListComponent: true,
 			// 是否展示代码
+
+
+			eeState: 0,
 		};
 	},
 	computed: {

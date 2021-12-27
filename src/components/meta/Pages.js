@@ -663,6 +663,33 @@ const PAGE_BREADCRUMBS = PageComponent('breadcrumbs',[
         },
     }
 ]);
+const PAGE_CARDS = PageComponent('cards',[
+    PropBool('has-image',true),
+    PropBool('has-header',true),
+    PropBool('has-body',true),
+    PropBool('has-footer',true),
+],[
+    {
+        ctx: 'gen-cards', inline: true,
+        func: ([image,header,body,footer])=>{
+            return `<div class="card">
+  ${image ? `<div class="card-image">
+    <img src="placeholder-image.gif" class="img-responsive" alt="placeholder"/>
+  </div>`: ``}
+  ${header ? `<div class="card-header">
+    <div class="card-title h5">header title</div>
+    <div class="card-subtitle text-gray">header subtitle</div>
+  </div>` : ``}
+  ${body ? `<div class="card-body">
+    card body
+  </div>` : ``}
+  ${footer ? `<div class="card-footer">
+    <button class="btn btn-primary">card footer button</button>
+  </div>` : ``}
+</div>`;
+        },
+    }
+]);
 const PAGE_CHIPS = PageComponent('chips',[
     PropString('text','chip text'),
     PropBool('has-avatar',true),
@@ -792,6 +819,29 @@ const PAGE_MENU = PageComponent('menu',[
         },
     },
 ]);
+const PAGE_PANELS = PageComponent('panels',[
+    PropBool('has-footer',true),
+],[
+    {
+        ctx: 'gen-panels', inline: true,
+        func: ([footer])=>{
+            return `<div class="panel" style="height: 400px">
+  <div class="panel-header">
+    <div class="panel-title">panal header</div>
+  </div>
+  <div class="panel-nav">
+    panel nav
+  </div>
+  <div class="panel-body">
+    <div style="height: 600px; border: dashed green 1px">panel body</div>
+  </div>
+  ${footer ? `<div class="panel-footer">
+    panel footer
+  </div>`: ``}
+</div>`;
+        },
+    },
+]);
 function POPOVER_CONTENT(type,head,body,footer)
 {
     let content;
@@ -909,6 +959,28 @@ const PAGE_TABS = PageComponent('tabs',[
   </li>`;
 
             return `<ul class="tab${block ? ' tab-block':''}">${tabContent}</ul>`;
+        },
+    },
+]);
+const PAGE_TILES = PageComponent('tiles',[
+    PropBool('is-compact', false),
+],[
+    {
+        ctx: 'gen-tiles', inline: false,
+        func: ([compact])=>{
+            return `<div class="tile${compact ? ` tile-centered` : ``}">
+  <div class="tile-icon">
+    <figure class="avatar avatar-lg" data-initial="Fi"></figure>
+  </div>
+  <div class="tile-content">
+    <p class="tile-title">tile title</p>
+    <p class="tile-subtitle">tile subtitle</p>
+  </div>
+  <div class="tile-action">
+    <button class="btn btn-primary">btn1</button>
+    <button class="btn">btn2</button>
+  </div>
+</div>`;
         },
     },
 ]);
@@ -1149,10 +1221,13 @@ const MetaPages = [
         PAGE_BREADCRUMBS,
         PAGE_EMPTY_STATES,
         PAGE_MENU,
+        PAGE_CARDS,
         PAGE_CHIPS,
+        PAGE_PANELS,
         PAGE_POPOVERS,
         PAGE_STEPS,
         PAGE_TABS,
+        PAGE_TILES,
         PAGE_TOASTS,
         PAGE_TOOLTIPS,
     ]),

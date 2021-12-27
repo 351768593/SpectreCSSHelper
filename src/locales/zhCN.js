@@ -332,6 +332,14 @@ export default {
       'count-step': { '#title': '步数' },
       'has-tooltip': { '#title': '包含提示信息' },
     },
+    'cards': {
+      '#title': '卡片',
+
+      'has-image': { '#title': '包含图片' },
+      'has-header': { '#title': '包含 header' },
+      'has-body': { '#title': '包含 body' },
+      'has-footer': { '#title': '包含 footer' },
+    },
     'chips': {
       '#title': '标签',
 
@@ -350,6 +358,11 @@ export default {
     },
     'menu': {
       '#title': '菜单',
+    },
+    'panels': {
+      '#title': '面板',
+
+      'has-footer': { '#title': '包含 footer' },
     },
     'popovers': {
       '#title': '浮动框',
@@ -381,6 +394,11 @@ export default {
       'badge': { '#title': '包含标记' },
       'clear': { '#title': '包含关闭按钮' },
       'action': { '#title': '包含操作栏' },
+    },
+    'tiles': {
+      '#title': '瓦片',
+
+      'is-compact': { '#title': '是否紧凑' },
     },
     'toasts': {
       '#title': '吐司',

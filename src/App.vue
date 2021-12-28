@@ -76,7 +76,7 @@
 #ee {
 	position: fixed;
 	bottom: 0;
-	right: 40px;
+	right: 70px;
 	width: 64px;
 	height: 64px;
 }
@@ -124,18 +124,33 @@
 #eett
 {
 	position: absolute;
-	top: -80px;
+	top: -130px;
+	left: -52px;
 	display: none;
 
-	width: 200px;
-	height: 60px;
-	border: 1px solid green;
-	background-color: #1e0f1e;
+	width: 170px;
+	height: 110px;
+	padding: 6px;
+	border: 2px solid #2e0a65;
+	border-radius: 2px;
+	box-shadow: 0 0 0 3px #170817;
+	background-color: #08082a;
 	opacity: 90%;
+
+	font-family: "Minecraft";
 }
 #ee #ees:hover+#eett
 {
 	display: block;
+}
+#eettt
+{
+	color: #f3a;
+	font-weight: bold;
+}
+#eettst
+{
+	color: #21ff21;
 }
 
 </style>
@@ -316,10 +331,10 @@
 			<img id="ees" src="diamond-sword.png" alt="diamond-sword"/>
 			<div id="eett">
 				<div id="eettt">
-					村人之剑
+					ワールド・エンド
 				</div>
 				<div id="eettst">
-					the Sword
+					We are tossed by the waves of pain and tears
 				</div>
 			</div>
 		</div>
@@ -350,7 +365,7 @@ const INSTALLATION_PAGE = { type: 'about-installation' };
 export default {
 
 	mounted() {
-		this.clickNode(MetaPages[1].children[15]);
+		this.clickNode(MetaPages[0].children[9]);
 	},
 
 	name: 'App',

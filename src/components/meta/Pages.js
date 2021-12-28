@@ -264,6 +264,40 @@ const PAGE_CHECKBOX = PageComponent('form-checkbox',[
         },
     }
 ]);
+function BODY_ICON(type,shape,size,px,color)
+{
+    let setClass = new Set(), setStyle = new Set();
+    switch (size)
+    {
+        case '1x': break;
+        case '2x': setClass.add('icon-2x'); break;
+        case '3x': setClass.add('icon-3x'); break;
+        case '4x': setClass.add('icon-4x'); break;
+        case 'custom': setStyle.add(`font-size: ${px}px`); break;
+    }
+    setClass.add(type);
+    setStyle.add(`color: ${color}`);
+    const strClass = [...setClass].join(' ');
+    const strStyle = [...setStyle].join('; ');
+
+    let strProp = `${strClass.length ? ' ' + strClass : ''}`;
+
+    switch (shape)
+    {
+        case 'span':
+            return `<span class="${type}${paramSize}"></span>`;
+    }
+}
+const PAGE_ICONS = PageComponent('icons',[
+    PropSingleSelect('shape','span',[
+        'span','i','button-rect','button-circle',
+    ]),
+    PropSingleSelect('size','1x',[
+        '1x','2x','3x','4x','custom',
+    ]),
+    PropSlider('size-px',16,4,128,1,'4px','128px'),
+    PropColor('color-icon','#000000'),
+],[]);
 const PAGE_CODE = PageComponent('code',[
     PropString('lang','HTML'),
     PropString('content','container text'),
@@ -1199,14 +1233,7 @@ const MetaPages = [
         PAGE_FORM_RADIO,
         PAGE_SWITCH,
         PAGE_CHECKBOX,
-
-        PageComponent('icons',[
-            PropSingleSelect('dom-type','span',['span','i','div']),
-            PropSingleSelect('size','multiply',['multiply','px']),
-            PropSlider('size-multiply',1,1,4,'1x','4x'),
-            PropSlider('size-px',16,1,128,'1px','128px'),
-        ]),
-
+        PAGE_ICONS,
         PAGE_CODE,
         PAGE_MEDIA_IMAGE,
         PAGE_MEDIA_VIDEO,

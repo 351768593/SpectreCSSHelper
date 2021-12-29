@@ -28,4 +28,19 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+
+  <script>
+      function sound()
+      {
+          let audio = new Audio('Ender_Dragon_death.ogg');
+          sound.volume = 0.2;
+          setTimeout(()=>{ sound.volume = 0.3; },1000);
+          setTimeout(()=>{ sound.volume = 0.5; },2000);
+          setTimeout(()=>{ sound.volume = 0.8; },3000);
+          setTimeout(()=>{ sound.volume = 1.0; },4000);
+          audio.play();
+          return audio;
+      }
+      window.sound = sound;
+  </script>
 </html>

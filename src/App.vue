@@ -328,7 +328,7 @@
 
 		<div id="ee">
 			<img id="eef" src="fire.gif" alt="fire"/>
-			<img id="ees" src="diamond-sword.png" alt="diamond-sword"/>
+			<img id="ees" src="diamond-sword.png" alt="diamond-sword" @click="clickSound"/>
 			<div id="eett">
 				<div id="eettt">
 					ワールド・エンド
@@ -365,7 +365,7 @@ const INSTALLATION_PAGE = { type: 'about-installation' };
 export default {
 
 	mounted() {
-		this.clickNode(MetaPages[0].children[9]);
+		this.clickNode(MetaPages[1].children[9]);
 	},
 
 	name: 'App',
@@ -430,6 +430,10 @@ export default {
 		},
 	},
 	methods: {
+		clickSound()
+		{
+			window.sound();
+		},
 		closePage(indexComponent)
 		{
 			this.listPages.splice(indexComponent, 1);

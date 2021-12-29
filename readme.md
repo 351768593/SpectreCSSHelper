@@ -15,7 +15,7 @@ download the latest zip from release page and open `index.html`
 
 ### 调试与修改 for devs
 
-```batch
+```
 clone repo
 npm install
 npm run serve
@@ -41,79 +41,80 @@ generators
 
 > for elements
 
-- [X]  typography
-- [X]  tables
-- [X]  buttons
-- [ ]  form-input
-- [X]  form-textarea
-- [X]  form-select
+- [x] typography
+- [x] tables
+- [x] buttons
+- [ ] form-input
+- [x] form-textarea
+- [x] form-select
 
 - [x form-radio
 
-- [X]  form-switch
-- [X]  form-checkbox
-- [ ]  icons
-- [X]  code
-- [X]  media-image
-- [X]  media-video
+- [x] form-switch
+- [x] form-checkbox
+- [x] icons
+- [x] code
+- [x] media-image
+- [x] media-video
 
 > for layout
 
-- [X]  hero
-- [X]  navbar
+- [x] hero
+- [x] navbar
 
 > for components
 
-- [X]  accordions
-- [X]  avatars
-- [X]  badges
-- [X]  bars
-- [ ]  bars-slider
-- [X]  breadcrumbs
-- [X]  cards
-- [X]  chips
-- [X]  empty states
-- [X]  menu
-- [ ]  <del>modals</del>
-- [ ]  nav
-- [ ]  pagination
-- [X]  panels
-- [X]  popovers
-- [X]  steps
-- [X]  tabs
-- [X]  tiles
-- [X]  toasts
-- [X]  tooltips
+- [x] accordions
+- [x] avatars
+- [x] badges
+- [x] bars
+- [ ] bars-slider
+- [x] breadcrumbs
+- [ ] cards
+- [x] chips
+- [x] empty states
+- [x] menu
+- [ ] ~~modals~~
+- [x] nav
+- [ ] pagination
+- [ ] panels
+- [x] popovers
+- [x] steps
+- [x] tabs
+- [ ] tiles
+- [x] toasts
+- [x] tooltips
 
 > for utilities
 
-- [ ]  display
-- [ ]  divider
-- [ ]  <del>loading</del>
-- [ ]  position
-- [ ]  shapes
+- [ ] ~~display~~
+- [ ] divider
+- [ ] ~~loading~~
+- [ ] ~~position~~
+- [ ] ~~shapes~~
 
 > for experimentals
 
-- [ ]  360-degree viewer
-- [ ]  autocomplete
-- [ ]  calendars
-- [ ]  carousels
-- [X]  comparison slider
-- [X]  filters
-- [ ]  meters
-- [ ]  <del>off-canvas</del>
-- [ ]  parallax [!] css error
-- [X]  progress
-- [X]  slider
-- [X]  timelines
+- [ ] 360-degree viewer
+- [ ] autocomplete
+- [ ] calendars
+- [ ] carousels
+- [x] comparison slider
+- [x] filters
+- [ ] meters
+- [ ] ~~off-canvas~~
+- [ ] parallax [!] css error
+- [x] progress
+- [x] slider
+- [x] timelines
 
 pages
 
-- [ ]  installation of Spectre.css
-- [ ]  about Spectre.css Helper
+- [ ] installation of Spectre.css
+- [ ] about Spectre.css Helper
 
 localizations
 
-- [ ]  Chinese
-- [ ]  English
+- [ ] Chinese
+- [ ] English
+

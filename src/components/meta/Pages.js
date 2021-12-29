@@ -853,6 +853,35 @@ const PAGE_MENU = PageComponent('menu',[
         },
     },
 ]);
+const PAGE_NAV = PageComponent('nav',[
+    PropSlider('count-group',3,1,5,1,'3','5'),
+    PropSlider('count-children',4,0,4,1,'0','4'),
+    PropSlider('active-item',2,0,4,1,'-','-'),
+],[
+    {
+        ctx: 'gen-nav', inline: true,
+        func: ([countGroup,countChildren,activeItem])=>{
+            let body = ``; // 组装最外层
+            for(let stepGroup = 0; stepGroup < countGroup; stepGroup++)
+            {
+                let partBody = `<a href="#">Elements</a>`;
+                if(countChildren > 0)
+                {
+                    partBody += `<ul class="nav">`;
+                    for(let stepChild = 0; stepChild < countChildren; stepChild++)
+                    {
+                        partBody += `<li class="nav-item"><a href="#">Flexbox grid</a></li>`;
+                    }
+                    partBody += `</ul>`;
+                }
+
+                body += `<li class="nav-item${activeItem === stepGroup? ' active' : ''}">${partBody}</li>`; // 组装每个节点内部的东西
+            }
+
+            return `<ul class="nav">${body}</ul>`;
+        },
+    },
+]);
 const PAGE_PANELS = PageComponent('panels',[
     PropBool('has-footer',true),
 ],[
@@ -1248,6 +1277,7 @@ const MetaPages = [
         PAGE_BREADCRUMBS,
         PAGE_EMPTY_STATES,
         PAGE_MENU,
+        PAGE_NAV,
         PAGE_CARDS,
         PAGE_CHIPS,
         PAGE_PANELS,

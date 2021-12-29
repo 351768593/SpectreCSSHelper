@@ -46,8 +46,10 @@
 <template>
 <div class="output-base" :class="generator.inline ? 'd-inline-block' : 'd-block'">
 	<div class="output-title">
-		<span class="output-title-text text-gray text-small">{{generator.ctx}}</span>
+<!--		<span class="output-title-text text-gray text-small">{{generator.ctx}}</span>-->
 		<span class="output-title-operation px-1">
+			<span class="ri-information-line mr-1 tooltip tooltip-left"
+			      :data-tooltip="generator.ctx" style="color: #b8cc6c"></span>
 			<span class="ri-code-s-slash-line mx-1 c-hand tooltip tooltip-left"
 			      :data-tooltip="$t('msg-view-code')"
 			      @click="isShowModalCode = true"
@@ -111,8 +113,8 @@ export default {
 	computed: {
 		styleDisplay() {
 			let style = this.generator.style ?? {};
-			style.minWidth ??= '160px';
-			style.minHeight ??= '80px';
+			style.minWidth ??= '80px';
+			style.minHeight ??= '40px';
 			return style;
 		},
 	},

@@ -180,7 +180,28 @@ export default {
       },
     },
     'icons': {
-      '#title': '!! 图标',
+      '#title': '图标',
+
+      'shape': {
+        '#title': '样式',
+
+        'span': '<span>',
+        'i': '<i>',
+        'button-rectangle': '矩形按钮',
+        'button-square': '正方形按钮',
+        'button-circle': '圆形按钮',
+      },
+      'size': {
+        '#title': '尺寸',
+
+        '1x': '1x',
+        '2x': '2x',
+        '3x': '3x',
+        '4x': '4x',
+        'custom': '自定义',
+      },
+      'size-px': { '#title': '自定义像素尺寸' },
+      'color-icon': { '#title': '图标颜色' },
     },
     'code': {
       '#title': '代码',

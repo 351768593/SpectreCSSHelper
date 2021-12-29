@@ -18,6 +18,8 @@ const i18n = createI18n({
         zhCN,
     },
 
+    warnHtmlInMessage: 'off',
+
     // fallbackWarn: false,
     // missingWarn: false,
     // debug: false,

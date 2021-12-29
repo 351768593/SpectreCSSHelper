@@ -267,37 +267,70 @@ const PAGE_CHECKBOX = PageComponent('form-checkbox',[
 function BODY_ICON(type,shape,size,px,color)
 {
     let setClass = new Set(), setStyle = new Set();
-    switch (size)
+    if(shape === 'span' || shape === 'i')
     {
-        case '1x': break;
-        case '2x': setClass.add('icon-2x'); break;
-        case '3x': setClass.add('icon-3x'); break;
-        case '4x': setClass.add('icon-4x'); break;
-        case 'custom': setStyle.add(`font-size: ${px}px`); break;
+        switch (size)
+        {
+            case '1x': break;
+            case '2x': setClass.add('icon-2x'); break;
+            case '3x': setClass.add('icon-3x'); break;
+            case '4x': setClass.add('icon-4x'); break;
+            case 'custom': setStyle.add(`font-size: ${px}px`); break;
+        }
     }
+    setClass.add('icon');
     setClass.add(type);
     setStyle.add(`color: ${color}`);
     const strClass = [...setClass].join(' ');
     const strStyle = [...setStyle].join('; ');
 
-    let strProp = `${strClass.length ? ' ' + strClass : ''}`;
+    let strProp = `style="${strStyle}" class="${strClass}"`;
 
     switch (shape)
     {
         case 'span':
-            return `<span class="${type}${paramSize}"></span>`;
+            return `<span ${strProp}></span>`;
+        case 'i':
+            return `<i ${strProp}></i>`;
+        case 'button-rectangle':
+            return `<button class="btn btn-primary"><i ${strProp}></i></button>`;
+        case 'button-square':
+            return `<button class="btn btn-primary btn-action"><i ${strProp}></i></button>`;
+        case 'button-circle':
+            return `<button class="btn btn-primary s-circle"><i ${strProp}></i></button>`;
     }
+}
+const ICON_GENERATORS = [];
+for(let iconType of [
+    'icon-arrow-up','icon-arrow-right','icon-arrow-down','icon-arrow-left',
+    'icon-upward','icon-forward','icon-downward','icon-back',
+    'icon-caret','icon-menu','icon-apps','icon-more-horiz',
+    'icon-more-vert',
+    'icon-resize-horiz','icon-resize-vert','icon-plus','icon-minus',
+    'icon-cross','icon-check','icon-stop','icon-shutdown',
+    'icon-refresh','icon-search','icon-flag','icon-bookmark',
+    'icon-edit','icon-delete','icon-share','icon-download',
+    'icon-upload','icon-copy',
+    'icon-mail','icon-people','icon-message','icon-photo',
+    'icon-time','icon-location','icon-link','icon-emoji',
+]){
+    ICON_GENERATORS.push({
+        ctx: 'gen-icons-' + iconType, inline: true,
+        func: ([shape,size,px,color])=>{
+            return BODY_ICON(iconType,shape,size,px,color);
+        },
+    });
 }
 const PAGE_ICONS = PageComponent('icons',[
     PropSingleSelect('shape','span',[
-        'span','i','button-rect','button-circle',
+        'span','i','button-rectangle','button-square','button-circle',
     ]),
     PropSingleSelect('size','1x',[
         '1x','2x','3x','4x','custom',
     ]),
-    PropSlider('size-px',16,4,128,1,'4px','128px'),
-    PropColor('color-icon','#000000'),
-],[]);
+    PropSlider('size-px',16,12,256,1,'12px','256px'),
+    PropColor('color-icon','#3798c8'),
+],ICON_GENERATORS);
 const PAGE_CODE = PageComponent('code',[
     PropString('lang','HTML'),
     PropString('content','container text'),

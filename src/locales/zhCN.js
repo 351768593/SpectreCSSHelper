@@ -380,6 +380,13 @@ export default {
     'menu': {
       '#title': '菜单',
     },
+    'nav': {
+      '#title': '导航',
+
+      'count-group': { '#title': '导航数量' },
+      'count-children': { '#title': '子导航数量' },
+      'active-item': { '#title': '激活项' },
+    },
     'panels': {
       '#title': '面板',
 

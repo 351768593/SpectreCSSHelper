@@ -75,7 +75,7 @@ generators
 - [x] empty states
 - [x] menu
 - [ ] ~~modals~~
-- [ ] nav
+- [x] nav
 - [ ] pagination
 - [x] panels
 - [x] popovers
@@ -87,11 +87,11 @@ generators
 
 > for utilities
 
-- [ ] display
+- [ ] ~~display~~
 - [ ] divider
 - [ ] ~~loading~~
-- [ ] position
-- [ ] shapes
+- [ ] ~~position~~
+- [ ] ~~shapes~~
 
 > for experimentals
 
@@ -117,4 +117,3 @@ localizations
 
 - [ ] Chinese
 - [ ] English
-

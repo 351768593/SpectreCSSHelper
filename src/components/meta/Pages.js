@@ -73,7 +73,7 @@ function setContext(node, contextParent)
 // elements
 const PAGE_TYPOGRAPHY = PageComponent('typography', [
     PropString('text','demo text'),
-    PropSingleSelect('dom', 'none',[
+    PropSingleSelect('dom', 'span',[
         'div', 'span', 'h6', 'h5', 'h4', 'h3', 'h2', 'h1',
         'label', 'abbr', 'strong', 'b', 'cite', 'code', 'del', 'em',
         'i', 'ins', 'kbd', 'mark', 'ruby', 's', 'samp', 'sub',

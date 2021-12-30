@@ -6,8 +6,10 @@ import { createI18n } from 'vue-i18n'
 // 高亮库
 import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'
+import bash from 'highlight.js/lib/languages/bash'
 import hljsVuePlugin from "@highlightjs/vue-plugin"
 hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('bash',bash);
 
 import zhCN from './locales/zhCN'
 

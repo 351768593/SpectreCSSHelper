@@ -523,6 +523,12 @@ export default {
 
     'about-installation': {
       '#title': '安装 Spectre.css',
+      'official': '官网',
+      'manually': '手动安装',
+      'cdn': 'CDN 加载',
+      'npm': 'NPM 安装',
+      'yarn': 'Yarn 安装',
+      'bower': 'Bower 安装',
     },
 
     'about-spectre-css-helper': {

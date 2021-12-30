@@ -189,10 +189,10 @@
 
 					<li class="tab-item tab-action">
 						<span>
-							<span class="ri-translate mr-2 c-hand tooltip tooltip-left"
-							      :data-tooltip="$t('msg-switch-translation')"
-							      style="color: #6786b0"
-							      @click="void(0)"></span>
+<!--							<span class="ri-translate mr-2 c-hand tooltip tooltip-left"-->
+<!--							      :data-tooltip="$t('msg-switch-translation')"-->
+<!--							      style="color: #6786b0"-->
+<!--							      @click="void(0)"></span>-->
 							<span class="ri-list-unordered mr-2 c-hand tooltip tooltip-left"
 							      :data-tooltip="$t('msg-show-list-component')"
 							      :style="{color: isShowLeftListComponent ? '#ee8e13' : '' }"
@@ -311,8 +311,10 @@
 					</div>
 				</div>
 				<div v-else-if="currentPage.type === 'about-installation'" id="panel-operation-homepage" class="scroll-y">
-<!--					<home-page/>-->
-					安装页面
+					<about-installation-spectre-css />
+				</div>
+				<div v-else-if="currentPage.type === 'about-spectre-css-helper'">
+					<about-spectre-css-helper />
 				</div>
 				<div v-else-if="currentPage.type === 'empty'" style="height: 100%">
 					<div class="empty" style="height: 100%">
@@ -326,9 +328,9 @@
 
 		</div>
 
-		<div id="ee">
-			<img id="eef" src="fire.gif" alt="fire"/>
-			<img id="ees" src="diamond-sword.png" alt="diamond-sword" @click="clickSound"/>
+		<div id="ee" v-if="eeState === 1">
+			<img id="eef" :src="eeResources.F.url" alt="fire"/>
+			<img id="ees" :src="eeResources.ES.url" alt="diamond-sword"/>
 			<div id="eett">
 				<div id="eettt">
 					ワールド・エンド
@@ -362,14 +364,47 @@ import ComponentOutput from "@/components/ComponentOutput";
 const EMPTY_PAGE = { type: 'empty' };
 const INSTALLATION_PAGE = { type: 'about-installation' };
 
+import axios from 'axios';
+import AboutInstallationSpectreCss from "@/components/AboutInstallationSpectreCss";
+import AboutSpectreCssHelper from "@/components/AboutSpectreCssHelper";
+
+function handleBlob(name, raw, [start, end], type){
+	let ret = {};
+	let blobPart = raw.slice(start, end);
+	let urlPart = window.URL.createObjectURL(blobPart);
+	switch (type)
+	{
+		case 'img':
+			let img = new Image();
+			img.src = urlPart;
+			ret.data = img;
+			ret.url = urlPart;
+			break;
+
+		case 'audio':
+			let audio = new Audio(urlPart);
+			ret.data = audio;
+			break;
+
+		case 'json':
+			ret.data = new String(blobPart);
+			break;
+	}
+	ret.name = name;
+	return ret;
+}
+
 export default {
 
 	mounted() {
-		this.clickNode(MetaPages[1].children[9]);
+		this.clickNode(MetaPages[4].children[1]);
+		// this.playEE();
 	},
 
 	name: 'App',
 	components: {
+		AboutSpectreCssHelper,
+		AboutInstallationSpectreCss,
 		ComponentOutput,
 		ListComponent
 	},
@@ -389,6 +424,8 @@ export default {
 
 			EMPTY_PAGE,
 			INSTALLATION_PAGE,
+
+			eeResources: null,
 
 			// 打开的组件列表
 			listPages: [
@@ -430,9 +467,78 @@ export default {
 		},
 	},
 	methods: {
-		clickSound()
+		playEE()
 		{
-			window.sound();
+			this.eeState = 0;
+			axios({
+				url: 'ee-pack.bin',
+				method: 'get',
+				responseType: 'blob',
+			})
+			.then(resBlob=>{
+				let blob = resBlob.data;
+				let res = {
+					"ES": handleBlob('ES', blob,  [0,721], 'img'),
+					"EDD": handleBlob('EDD', blob,  [721,257823], 'audio'),
+					"EDH1": handleBlob('EDH1', blob,  [257823,268879], 'audio'),
+					"EDH2": handleBlob('EDH2', blob,  [268879,279759], 'audio'),
+					"EDH3": handleBlob('EDH3', blob,  [279759,290917], 'audio'),
+					"EDH4": handleBlob('EDH4', blob,  [290917,301729], 'audio'),
+					"EDW1": handleBlob('EDW1', blob,  [301729,312346], 'audio'),
+					"EDW2": handleBlob('EDW2', blob,  [312346,322827], 'audio'),
+					"EDW3": handleBlob('EDW3', blob,  [322827,333200], 'audio'),
+					"E1": handleBlob('E1', blob,  [333200,352932], 'audio'),
+					"E2": handleBlob('E2', blob,  [352932,378178], 'audio'),
+					"E3": handleBlob('E3', blob,  [378178,403476], 'audio'),
+					"F": handleBlob('F', blob,  [403476,418045], 'img'),
+					"E4": handleBlob("E4", blob, [418045,443135], 'audio'),
+				};
+				this.eeResources = res;
+
+				// this.eeState = 1;
+
+				let processAnimation = 1;
+				let threadAnimation = setInterval(()=>{
+					processAnimation++;
+
+					if(processAnimation < 130 && processAnimation % 16 === 0)
+					{
+						[res.EDW1, res.EDW2, res.EDW3]
+						[Math.floor(3 * Math.random())]
+						.data.play();
+					}
+
+					if(processAnimation < 130 && processAnimation % 12 === 0)
+					{
+						[res.E1, res.E2, res.E3, ]
+						[Math.floor(3 * Math.random())]
+						.data.play();
+					}
+					if(processAnimation > 10 && processAnimation < 130 && processAnimation % 23 === 2)
+					{
+						[res.EDH1, res.EDH2, res.EDH3, res.EDH4]
+						[Math.floor(4 * Math.random())]
+						.data.play();
+					}
+
+					if(processAnimation === 130)
+					{
+						res.E4.data.play();
+						res.EDD.data.play();
+					}
+					if(processAnimation === 190)
+					{
+						this.eeState = 1;
+						clearInterval(threadAnimation);
+					}
+					// console.log('process', processAnimation);
+				},100);
+
+			})
+			.catch(err=>{
+				console.log('ee-pack err!');
+				console.log(err);
+			});
 		},
 		closePage(indexComponent)
 		{

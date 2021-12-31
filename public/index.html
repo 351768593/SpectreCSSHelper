@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+<!--    <title><%= htmlWebpackPlugin.options.title %></title>-->
+      <title>Spectre.css Helper</title>
       <style>
           @font-face {
               font-family: "Minecraft";
@@ -22,6 +23,9 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div style="font-family: 'Minecraft'; font-size: 0">force load font</div>
+    <div style="width: 0; height: 0; overflow: hidden">
+        <img src="ee-pack.bin" alt="force load resource" id="imgEEPack">
+    </div>
     <div id="app"></div>
   </body>
 </html>

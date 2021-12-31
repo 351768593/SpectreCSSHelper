@@ -66,8 +66,6 @@
 			0.0.14 by Firok
 		</h5>
 
-		<p> {{isLedOn}}</p>
-
 		<p style="margin: 40px 0">
 			<a href="https://github.com/351768593/SpectreCSSHelper" target="_blank">
 				<span class="btn">

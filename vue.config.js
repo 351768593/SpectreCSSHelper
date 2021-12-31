@@ -16,5 +16,7 @@ module.exports = {
         compositionOnly: false,
         fullInstall: true
       }
-    }
+    },
+
+    publicPath: './',
 }

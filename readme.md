@@ -47,9 +47,7 @@ generators
 - [ ] form-input
 - [x] form-textarea
 - [x] form-select
-
-- [x form-radio
-
+- [x] form-radio
 - [x] form-switch
 - [x] form-checkbox
 - [x] icons
@@ -88,7 +86,7 @@ generators
 > for utilities
 
 - [ ] ~~display~~
-- [ ] divider
+- [x] divider
 - [ ] ~~loading~~
 - [ ] ~~position~~
 - [ ] ~~shapes~~
@@ -110,10 +108,11 @@ generators
 
 pages
 
-- [ ] installation of Spectre.css
-- [ ] about Spectre.css Helper
+- [x] installation of Spectre.css
+- [x] about Spectre.css Helper
 
 localizations
 
-- [ ] Chinese
+- [x] Chinese
 - [ ] English
+

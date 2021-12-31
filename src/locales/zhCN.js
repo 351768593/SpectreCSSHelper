@@ -454,6 +454,13 @@ export default {
       'text-dom': { '#title': '内部元素文本' },
       'text-tooltip': { '#title': '提示信息文本' },
     },
+
+
+    'divider': {
+      '#title': '分割线',
+
+      'text': { '#title': '提示文字' }
+    },
   },
 
   'p-experimentals': {
@@ -506,10 +513,6 @@ export default {
       'count-step': { '#title': '步数' },
 
     },
-  },
-
-  'p-utilities': {
-    '#title': '工具',
   },
 
   'p-others': {

@@ -1145,6 +1145,25 @@ const PAGE_TOOLTIPS = PageComponent('tooltips',[
     }
 ]);
 
+const PAGE_DIVIDER = PageComponent('divider',[
+    PropString('text','OR'),
+],[
+    {
+        ctx: 'gen-divider', inline: false,
+        func: ([text])=>{
+            return `<div class="divider${text.length ? ' text-center' : ''}"${text.length ? ` data-content="${text}"`: ''}></div>`;
+        },
+    },
+    {
+        ctx: 'gen-divider-vert', inline: false,
+        func: ([text])=>{
+            return `<div class="columns" style="height: 400px">
+<div class="divider-vert"${text.length ? ` data-content="${text}"`: ''}></div>
+</div>`;
+        },
+    }
+]);
+
 // experimentals
 const PAGE_COMPARISON_SLIDERS = PageComponent('comparison-sliders',[],[
     {
@@ -1320,8 +1339,8 @@ const MetaPages = [
         PAGE_TILES,
         PAGE_TOASTS,
         PAGE_TOOLTIPS,
+        PAGE_DIVIDER,
     ]),
-    Group('p-utilities'),
     Group('p-experimentals',[
         PAGE_COMPARISON_SLIDERS,
         PAGE_FILTERS,

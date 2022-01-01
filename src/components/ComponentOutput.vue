@@ -56,7 +56,7 @@
 			      style="color: #9538f2"></span>
 			<span class="ri-file-copy-2-line ml-1 c-hand tooltip tooltip-left"
 			      :data-tooltip="$t('msg-copy-code')"
-			      @click="clickCopyCode(html)"
+			      @click="clickCopyCode()"
 			      style="color: #389bf2"></span>
 		</span>
 	</div>
@@ -69,16 +69,14 @@
 		<div class="modal-container modal-code-container">
 
 			<div class="modal-code-operation">
-				<span data-clipboard-action="copy"
-				      :data-clipboard-text="html"
-				      :id="'for-line-height-and-copy' + generator.ctx">&ensp;</span>
+				<span>&ensp;</span>
 				<span class="float-left">
 					{{generator.ctx}}
 				</span>
 				<span class="float-right" style="font-size: 24px">
 					<span class="ri-file-copy-2-line c-hand tooltip tooltip-left"
 					      :data-tooltip="$t('msg-copy-code')"
-					      @click="clickCopyCode(html)"
+					      @click="clickCopyCode()"
 					      style="color: #389bf2; font-size: 24px"></span>
 					<span class="ri-close-line ml-2 c-hand"
 					      @click="isShowModalCode = false"
@@ -90,7 +88,7 @@
 				<highlightjs
 						v-if="isShowModalCode"
 						language="xml"
-						:code="html"
+						:code="htmlFormatted"
 				/>
 			</div>
 
@@ -121,20 +119,19 @@ export default {
 			style.minHeight ??= '40px';
 			return style;
 		},
+		htmlFormatted() {
+			return jsb.html(this.html);
+		},
 	},
 	methods: {
-		clickCopyCode(raw) {
-
-			navigator.clipboard.writeText(jsb.html(raw))
+		clickCopyCode() {
+			navigator.clipboard.writeText(this.htmlFormatted)
 			.then(r=>{
 				this.isShowModalCode = false;
 			})
 			.catch(e=>{
 				alert('复制失败\n'+e);
 			});
-
-			console.log('finished');
-			// this.isShowModalCode = false;
 		},
 	},
 }

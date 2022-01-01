@@ -53,7 +53,7 @@
 			Spectre.css Helper
 		</h3>
 		<h5>
-			0.0.16 by Firok
+			0.0.17 by Firok
 		</h5>
 
 		<p style="margin: 40px 0">

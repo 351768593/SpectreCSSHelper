@@ -1227,7 +1227,7 @@ const PAGE_FILTERS = PageComponent('filters',[
 const PAGE_PARALLAX = PageComponent('parallax',[
     PropString('text','parallax text'),
     PropSingleSelect('dom','h2',['h1','h2','h3','h4','h5','h6','div']),
-    PropString('img-url','https://via.placeholder.com/250.gif/2db38a/4a22c0?text=placeholder+picture'),
+    PropString('img-url','placeholder-image.gif'),
 ],[
     {
         ctx: 'gen-parallax', inline: false,

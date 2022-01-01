@@ -19,6 +19,7 @@ download the latest zip from release page and open `index.html`
 clone repo
 npm install
 npm run serve
+npm run build
 ```
 
 > When a developer become a user,
@@ -101,7 +102,7 @@ generators
 - [x] filters
 - [ ] meters
 - [ ] ~~off-canvas~~
-- [ ] parallax [!] css error
+- [x] parallax
 - [x] progress
 - [x] slider
 - [x] timelines

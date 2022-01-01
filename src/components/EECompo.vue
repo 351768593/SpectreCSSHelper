@@ -9,8 +9,8 @@
 }
 @keyframes ees-drop {
 	0% { opacity: 0; top: -1500px; }
-	50% { opacity: 100%; top: -750px; }
-	100% { opacity: 100%; top: 0; }
+	50% { opacity: 1; top: -750px; }
+	100% { opacity: 1; top: 0; }
 }
 @keyframes ees-wave {
 	0% { transform: rotate(135deg); left: 0; }
@@ -34,7 +34,7 @@
 }
 @keyframes eef-appear {
 	from { opacity: 0; }
-	to { opacity: 85%; }
+	to { opacity: 0.85; }
 }
 #eef {
 	position: absolute;
@@ -46,7 +46,7 @@
 
 	animation: eef-appear 0.5s;
 	animation-delay: 0.9s;
-	animation-fill-mode: forwards;
+	animation-fill-mode: both;
 
 	z-index: 1;
 }
@@ -64,7 +64,7 @@
 	border-radius: 2px;
 	box-shadow: 0 0 0 3px #170817;
 	background-color: #08082a;
-	opacity: 90%;
+	opacity: 0.9;
 
 	font-family: "Minecraft";
 }
@@ -90,8 +90,8 @@
 <template>
 	<div>
 		<div id="ee" v-if="eeResources !== null">
-			<img id="eef" :src="eeResources?.F?.url" v-show="processAnimation > 75" alt="fire"/>
-			<img id="ees" :src="eeResources?.ES?.url" v-show="processAnimation > 75" alt="diamond-sword" ref="ees"/>
+			<img id="eef" :src="eeResources?.F?.url" v-show="processAnimation > 95" alt="fire"/>
+			<img id="ees" :src="eeResources?.ES?.url" v-show="processAnimation > 95" alt="diamond-sword" ref="ees"/>
 			<div id="eett">
 				<div id="eettt">
 					{{eeResources.T.data.t}}
@@ -108,8 +108,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import {handleBlob} from "@/components/meta/Methods";
+import {toByteArray} from 'base64-js'
 
 export default {
 	name: "EECompo",
@@ -119,75 +119,66 @@ export default {
 			processAnimation: 0,
 		};
 	},
-	mounted() {
-		axios({
-			url: 'ee-pack.bin',
-			method: 'get',
-			responseType: 'blob',
-		})
-		.then(async resBlob => {
-			let blob = resBlob.data;
-			let res = {
-				"ES": await handleBlob('ES', blob, [0, 721], 'img'),
-				"EDD": await handleBlob('EDD', blob, [721, 257823], 'audio'),
-				"EDH1": await handleBlob('EDH1', blob, [257823, 268879], 'audio'),
-				"EDH2": await handleBlob('EDH2', blob, [268879, 279759], 'audio'),
-				"EDH3": await handleBlob('EDH3', blob, [279759, 290917], 'audio'),
-				"EDH4": await handleBlob('EDH4', blob, [290917, 301729], 'audio'),
-				"EDW1": await handleBlob('EDW1', blob, [301729, 312346], 'audio'),
-				"EDW2": await handleBlob('EDW2', blob, [312346, 322827], 'audio'),
-				"EDW3": await handleBlob('EDW3', blob, [322827, 333200], 'audio'),
-				"E1": await handleBlob('E1', blob, [333200, 352932], 'audio'),
-				"E2": await handleBlob('E2', blob, [352932, 378178], 'audio'),
-				"E3": await handleBlob('E3', blob, [378178, 403476], 'audio'),
-				"F": await handleBlob('F', blob, [403476, 418045], 'img'),
-				"E4": await handleBlob("E4", blob, [418045, 443135], 'audio'),
-				"GD": await handleBlob("GD", blob, [443135, 450040], 'audio'),
-				"T": await handleBlob('T', blob, [450040, 450171], 'json'),
-			};
-			this.eeResources = res;
+	async mounted() {
+		let b64 = require('raw-loader!@/assets/resource/ee-pack.b64').default;
+		let ui18a = toByteArray(b64);
+		let blob = new Blob([ui18a]);
+		let res = {
+			"ES": await handleBlob('ES', blob, [0, 721], 'img'),
+			"EDD": await handleBlob('EDD', blob, [721, 257823], 'audio'),
+			"EDH1": await handleBlob('EDH1', blob, [257823, 268879], 'audio'),
+			"EDH2": await handleBlob('EDH2', blob, [268879, 279759], 'audio'),
+			"EDH3": await handleBlob('EDH3', blob, [279759, 290917], 'audio'),
+			"EDH4": await handleBlob('EDH4', blob, [290917, 301729], 'audio'),
+			"EDW1": await handleBlob('EDW1', blob, [301729, 312346], 'audio'),
+			"EDW2": await handleBlob('EDW2', blob, [312346, 322827], 'audio'),
+			"EDW3": await handleBlob('EDW3', blob, [322827, 333200], 'audio'),
+			"E1": await handleBlob('E1', blob, [333200, 352932], 'audio'),
+			"E2": await handleBlob('E2', blob, [352932, 378178], 'audio'),
+			"E3": await handleBlob('E3', blob, [378178, 403476], 'audio'),
+			"F": await handleBlob('F', blob, [403476, 418045], 'img'),
+			"E4": await handleBlob("E4", blob, [418045, 443135], 'audio'),
+			"GD": await handleBlob("GD", blob, [443135, 450040], 'audio'),
+			"T": await handleBlob('T', blob, [450040, 450171], 'json'),
+		};
+		this.eeResources = res;
+		this.eeResources.E1.data.play();
 
-			let threadAnimation = setInterval(() => {
-				this.processAnimation++;
-				let processAnimation = this.processAnimation;
+		let threadAnimation = setInterval(() => {
+			this.processAnimation++;
+			let processAnimation = this.processAnimation;
 
-				if (processAnimation === 10) {
-					this.$refs.ees.addEventListener('animationend', (e) => {
-						if (e.animationName.startsWith('ees-drop')) {
-							this.eeResources.GD.data.play();
-						}
-					});
-				}
+			if (processAnimation === 10) {
+				this.$refs.ees.addEventListener('animationend', (e) => {
+					if (e.animationName.startsWith('ees-drop')) {
+						this.eeResources.GD.data.play();
+					}
+				});
+			}
 
-				if (processAnimation < 75 && processAnimation % 16 === 0) {
-					[res.EDW1, res.EDW2, res.EDW3]
-							[Math.floor(3 * Math.random())]
-							.data.play();
-				}
+			if (processAnimation < 95 && processAnimation % 16 === 0) {
+				[res.EDW1, res.EDW2, res.EDW3]
+						[Math.floor(3 * Math.random())]
+						.data.play();
+			}
 
-				if (processAnimation < 75 && processAnimation % 12 === 0) {
-					[res.E1, res.E2, res.E3,]
-							[Math.floor(3 * Math.random())]
-							.data.play();
-				}
-				if (processAnimation > 10 && processAnimation < 75 && processAnimation % 23 === 2) {
-					[res.EDH1, res.EDH2, res.EDH3, res.EDH4]
-							[Math.floor(4 * Math.random())]
-							.data.play();
-				}
+			if (processAnimation < 95 && processAnimation % 12 === 0) {
+				[res.E1, res.E2, res.E3,]
+						[Math.floor(3 * Math.random())]
+						.data.play();
+			}
+			if (processAnimation > 10 && processAnimation < 75 && processAnimation % 23 === 2) {
+				[res.EDH1, res.EDH2, res.EDH3, res.EDH4]
+						[Math.floor(4 * Math.random())]
+						.data.play();
+			}
 
-				if (processAnimation > 75) {
-					res.E4.data.play();
-					res.EDD.data.play();
-					clearInterval(threadAnimation);
-				}
-			}, 100);
-
-		})
-		.catch(err=>{
-			console.log('ee-pack err!');
-			console.log(err);
-		});
+			if (processAnimation > 95) {
+				res.E4.data.play();
+				res.EDD.data.play();
+				clearInterval(threadAnimation);
+			}
+		}, 100);
 	},
 }
 </script>

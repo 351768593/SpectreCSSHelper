@@ -44,35 +44,17 @@
 {
 	flex-grow: 1;
 
-	overflow-y: hidden;
+	height: 100%;
+	overflow-y: scroll;
 }
 
 #panel-list-component-base
 {
 	width: 200px;
 }
-
-#panel-operation-component
-{
-	display: flex;
-	flex-wrap: nowrap;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: stretch;
-
-	height: 100%;
+#panel-operation-component{
+	width: 100%;
 }
-#panel-content-base
-{
-	flex-grow: 0;
-	flex-shrink: 0;
-	width: 300px;
-}
-#panel-output-base
-{
-	flex-grow: 1;
-}
-
 
 </style>
 
@@ -128,8 +110,8 @@
 			</div>
 
 			<div id="panel-operation-body">
-				<div v-if="currentPage.type === 'component'" id="panel-operation-component">
-					<div id="panel-content-base" class="scroll-y">
+				<div v-if="currentPage.type === 'component'" id="panel-operation-component" class="columns">
+					<div id="panel-content-base" class="column col-3 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-4 scroll-y">
 						<div v-if="currentPage.url !== ''">
 							<a :href="url.url" target="_blank" v-for="url in currentPage.listUrl">
 								<button class="btn">
@@ -218,9 +200,11 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="divider"></div>
 					</div>
 
-					<div id="panel-output-base" class="scroll-y">
+					<div id="panel-output-base" class="column col-9 col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-8 scroll-y">
 						<div v-if="currentComponentOutput?.length" style="margin: 14px 14px 0 14px">
 							<component-output v-for="output in currentComponentOutput"
 							                  :generator="output.generator"

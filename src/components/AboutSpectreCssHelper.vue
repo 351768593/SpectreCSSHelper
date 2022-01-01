@@ -9,29 +9,19 @@
 	width: 320px;
 	height: 160px;
 }
-#btn-up { position: absolute; left: 60px; top: 20px; }
-#btn-down { position: absolute; left: 60px; top: 100px; }
-#btn-left { position: absolute; left: 20px; top: 60px; }
-#btn-right { position: absolute; left: 100px; top: 60px; }
-#btn-b { position: absolute; left: 200px; top: 95px; }
-#btn-a { position: absolute; left: 250px; top: 95px; }
+/*#btn-up { position: absolute; left: 60px; top: 20px; }*/
+/*#btn-down { position: absolute; left: 60px; top: 100px; }*/
+/*#btn-left { position: absolute; left: 20px; top: 60px; }*/
+/*#btn-right { position: absolute; left: 100px; top: 60px; }*/
+/*#btn-b { position: absolute; left: 200px; top: 95px; }*/
+/*#btn-a { position: absolute; left: 250px; top: 95px; }*/
 #tm
 {
-	position: absolute;
-	left: 115px;
-	top: 35px;
-	width: 180px;
 	font-weight: bold;
 	font-family: Minecraft;
 	color: #141b94;
 }
 #led {
-	position: absolute;
-	left: 165px;
-	top: 35px;
-	width: 180px;
-	font-weight: bold;
-
 	color: #f62222;
 }
 @keyframes led-on {
@@ -63,7 +53,7 @@
 			Spectre.css Helper
 		</h3>
 		<h5>
-			0.0.14 by Firok
+			0.0.16 by Firok
 		</h5>
 
 		<p style="margin: 40px 0">
@@ -76,18 +66,28 @@
 		</p>
 
 	</div>
-	<div id="ee-controller">
-		<div class="p-absolute">
-			<span class="btn btn-action ri-arrow-up-line" id="btn-up" @click="c('↑')"></span>
-			<span class="btn btn-action ri-arrow-down-line" id="btn-down" @click="c('↓')"></span>
-			<span class="btn btn-action ri-arrow-left-line" id="btn-left" @click="c('←')"></span>
-			<span class="btn btn-action ri-arrow-right-line" id="btn-right" @click="c('→')"></span>
-
-			<span class="btn btn-action s-circle" id="btn-b" @click="c('B')">B</span>
-			<span class="btn btn-action s-circle" id="btn-a" @click="c('A')">A</span>
-
-			<span id="tm">PlayU ™</span>
-			<span id="led" class="ri-checkbox-blank-circle-fill" :class="isLedOn ? 'on' : ''"></span>
+	<div id="ee-controller" class="columns">
+		<div class="column col-6" style="margin-top: 30px;">
+			<div>
+				<span class="btn btn-action ri-arrow-up-line" id="btn-up" @click="c('↑')"></span>
+			</div>
+			<div>
+				<span class="btn btn-action ri-arrow-left-line" style="margin-right: 40px" id="btn-left" @click="c('←')"></span>
+				<span class="btn btn-action ri-arrow-right-line" id="btn-right" @click="c('→')"></span>
+			</div>
+			<div>
+				<span class="btn btn-action ri-arrow-down-line" id="btn-down" @click="c('↓')"></span>
+			</div>
+		</div>
+		<div class="column col-6">
+			<div style="margin: 40px 0 30px 0">
+				<span id="tm" style="margin-right: 10px">PlayU ™</span>
+				<span id="led" class="ri-checkbox-blank-circle-fill" :class="isLedOn ? 'on' : ''"></span>
+			</div>
+			<div>
+				<span class="btn btn-action s-circle" id="btn-b" style="margin-right: 10px" @click="c('B')">B</span>
+				<span class="btn btn-action s-circle" id="btn-a" @click="c('A')">A</span>
+			</div>
 		</div>
 	</div>
 </div>

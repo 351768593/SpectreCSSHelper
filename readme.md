@@ -2,16 +2,19 @@
 
 一个交互式生成 **Spectre.css** 组件的小工具.
 
-A small tool to generate **Spectre.css** components
+A small tool to generate **Spectre.css** components  
 in a more interactive and convenient way.
+
+> build with Spectre.css  
+> built for Spectre.css
 
 ## 使用方式 usages
 
 ### 直接使用 for users
 
-从 release 页面下载压缩包并打开 `index.html`
+从 [release 页面](https://github.com/351768593/SpectreCSSHelper/releases) 下载压缩包并打开 `index.html`
 
-download the latest zip from release page and open `index.html`
+download the latest .zip from release page and open `index.html`
 
 ### 调试与修改 for devs
 
@@ -22,8 +25,8 @@ npm run serve
 npm run build
 ```
 
-> When a developer become a user,
-> should we call him a developer,
+> When a developer become a user,  
+> should we call him a developer,  
 > or a user?
 
 ## 依赖和授权 Dependencies and Licences
